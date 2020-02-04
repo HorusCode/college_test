@@ -1,0 +1,32 @@
+.card {
+  display: flex;
+  background-color: #fff;
+  border-radius: .2rem;
+  overflow: hidden;
+  box-shadow: 0 3px 14px 0 #0000001a;
+  &.vertical {
+    flex-direction: column;
+  }
+}
+
+.card > .card-media {
+  flex: 0 1 auto;
+}
+
+.card-media > .image {
+  position: relative;
+  height: 100%;
+  img {
+    object-fit: cover;
+    height: inherit;
+  }
+}
+
+.card > .card-content {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  flex: 1 1 auto;
+}
+
+

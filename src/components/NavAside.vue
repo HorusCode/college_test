@@ -1,60 +1,66 @@
 <template>
-  <aside class="aside-left">
-    <nav class="main-menu">
-      <ul class="menu-items">
-        <li class="menu-item">
-          <a class="menu-link active" href="index.html">
-            <i class="fal fa-poll"></i>
-            <span class="nav-text">Результаты</span>
-          </a>
+  <aside class="sidebar">
+    <header class="sidebar__header d-flex justify-content-between align-items-center">
+      <div class="logo">
+        Logo
+      </div>
+      <div class="burger">
+        <span />
+        <span />
+        <span />
+      </div>
+    </header>
+    <div class="sidebar__content">
+      <ul class="sidebar__nav-menu vertical-list">
+        <li class="vertical-list__heading">
+          Меню
         </li>
-        <li class="menu-item">
-          <a class="menu-link" href="test.html">
-            <i class="fas fa-tasks"></i>
-            <span class="nav-text">Тесты</span>
+        <li class="vertical-list__item --active">
+          <a
+            href="#"
+            aria-expanded="true"
+          >
+            <span class="mdi mdi-clipboard-text-outline pos-left-null" />
+            Заявления
+            <span class="mdi mdi-chevron-up pos-right-null" />
           </a>
-        </li>
-        <li class="menu-item">
-          <a class="menu-link" href="practical.html">
-            <i class="fal fa-superscript"></i>
-            <span class="nav-text">Практические</span>
-          </a>
-        </li>
-        <li class="menu-item">
-          <a class="menu-link" href="lecture.html">
-            <i class="fal fa-book"></i>
-            <span class="nav-text">Лекции</span>
-          </a>
-        </li>
-        <li class="menu-item">
-          <a class="menu-link" href="presentation.html">
-            <i class="fal fa-presentation"></i>
-            <span class="nav-text">Презентации</span>
-          </a>
+          <ul class="submenu">
+            <li class="submenu__item">
+              <a
+                class=""
+                href=""
+              >Новые</a>
+            </li>
+            <li class="submenu__item">
+              <a
+                class=""
+                href=""
+              >Активные</a>
+            </li>
+            <li class="submenu__item">
+              <a
+                class=""
+                href=""
+              >Завершённые</a>
+            </li>
+          </ul>
         </li>
       </ul>
-
-      <ul class="logout">
-        <li class="menu-item">
-          <span class="menu-link-non support">
-            <i class="far fa-question-circle"></i>
-            <span class="nav-text">Справка</span>
-          </span>
-        </li>
-        <li class="menu-item">
-          <a class="menu-link exit">
-            <i class="fal fa-sign-out"></i>
-            <span class="nav-text">Выход</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
+    </div>
+    <footer class="sidebar__footer d-flex justify-content-center align-items-center">
+      <router-link
+        to="/"
+        class="btn btn-primary"
+      >
+        Выход
+      </router-link>
+    </footer>
   </aside>
 </template>
 
 <script>
 export default {
-  name: "NavAside"
+  name: 'NavAside',
 };
 </script>
 

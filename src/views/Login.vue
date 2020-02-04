@@ -1,37 +1,91 @@
 <template>
-  <div class="login">
-    <form id="login-student">
-      <span class="form-title">Ученик</span>
-      <div class="input-effect">
-        <input type="text" class="effect" name="name" required />
-        <label>ФИО</label>
-        <span class="focus-border" />
+  <div
+    id="login"
+    class="grid-login bg--orange-gradient"
+  >
+    <div class="card rad-1 login-card">
+      <div class="card-media">
+        <div class="image">
+          <img
+            :src="require('../assets/image/login-image.jpg')"
+            alt="Login please"
+          >
+        </div>
       </div>
-      <div class="input-effect">
-        <input type="text" class="effect" name="group" required />
-        <label>Группа</label>
-        <span class="focus-border" />
+      <div class="card-content">
+        <header class="card-header">
+          <h1 class="text-title text-primary">
+            College Test
+          </h1>
+          <h3 class="text-subtitle text-secondary">
+            Система тестирования студентов
+          </h3>
+        </header>
+        <student-form-card @showform="showForm" />
+        <teacher-form-card @showform="showForm" />
+        <repair-form-card @showform="showForm" />
+        <register-form-card @showform="showForm" />
       </div>
-      <router-link to="/home">Войти</router-link>
-    </form>
+    </div>
+    <footer class="login-footer">
+      <span
+        v-show="openRegisterBtn"
+        class="btn btn-primary rounded size-1"
+        @click="showForm(activeForm, '.registerForm')"
+      >Зарегистрироваться преподователю</span>
+    </footer>
   </div>
 </template>
 
 <script>
+import anime from 'animejs';
+import StudentFormCard from '../components/Cards/StudentFormCard';
+import TeacherFormCard from '../components/Cards/TeacherFormCard';
+import RepairFormCard from '../components/Cards/RepairFormCard';
+import RegisterFormCard from '../components/Cards/RegisterFormCard';
+
+
 export default {
-  name: "Login",
+  name: 'Login',
+  components: {
+    RegisterFormCard, RepairFormCard, TeacherFormCard, StudentFormCard,
+  },
   data() {
     return {
-      email: "",
-      password: ""
+      activeForm: '.studentForm',
+      openRegisterBtn: true,
     };
   },
+  computed: {
+    isUserAuth() {
+      return this.$store.getters.isUserAuth;
+    },
+  },
+  watch: {
+    isUserAuth(val) {
+      if (val === true) this.$router.push('/admin');
+    },
+  },
   methods: {
-    Auth: function() {
-      const { email, password } = this;
-      this.$store.dispatch("logIn", { email, password });
-    }
-  }
+    showForm(closeForm, openForm) {
+      this.openRegisterBtn = openForm !== '.registerForm';
+      this.activeForm = openForm;
+      const forms = anime.timeline({
+        duration: 750,
+        easing: 'easeInOutBack',
+      });
+      forms.add({
+        targets: closeForm,
+        translateX: '150%',
+        complete: () => {
+          document.querySelector(openForm).style.display = 'flex';
+          document.querySelector(closeForm).style.display = 'none';
+        },
+      }).add({
+        targets: openForm,
+        translateX: ['150%', '0%'],
+      });
+    },
+  },
 };
 </script>
-

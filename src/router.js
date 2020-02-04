@@ -1,23 +1,25 @@
-import Vue from "vue";
-import Router from "vue-router";
-import Login from "./views/Login.vue";
-import Home from "./views/Home.vue";
+import Vue from 'vue';
+import Router from 'vue-router';
+import Login from './views/Login';
+import Admin from './views/Admin';
+
 
 Vue.use(Router);
 
+
 export default new Router({
-  mode: "history",
+  mode: 'history',
   base: process.env.BASE_URL,
   routes: [
     {
-      path: "/",
-      name: "login",
-      component: Login
+      path: '/',
+      name: 'login',
+      component: Login,
     },
     {
-      path: "/home",
-      name: "home",
-      component: Home
-    }
-  ]
+      path: '/admin',
+      name: 'admin',
+      component: Admin,
+    },
+  ],
 });
