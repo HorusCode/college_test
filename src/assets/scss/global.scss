@@ -13,11 +13,20 @@
 @import 'base/variables';
 @import "base/settings";
 
+//Mixins
+@import "mixins/mixins";
+
+
+//Components
 @import "components/card";
+@import "components/nav-sidebar";
 @import "components/input";
 @import "components/button";
 @import "components/list";
-
+@import "components/header";
+@import "components/content";
+@import "components/footer";
+@import "components/modal";
 
 // @import "../css/animate.css";
 

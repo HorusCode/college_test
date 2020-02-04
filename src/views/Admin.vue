@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <nav-aside />
-    <main class="main container">
+    <main class="content">
       <div class="box">
         <header class="box-header">
           <span class="header-title">Результаты студентов</span>

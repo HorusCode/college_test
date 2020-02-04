@@ -1,0 +1,6 @@
+.content {
+  display: grid;
+  grid-area: c;
+  @include box();
+  margin: 0 $margin-gap;
+}
