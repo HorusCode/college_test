@@ -3,10 +3,10 @@
   flex-direction: column;
   justify-content: space-between;
   position: fixed;
-  top: 5rem;
+  top: $grid-gap;
   left: 20px;
   width: 280px;
-  height: calc(100% - 10rem);
+  height: calc(100% - 2.2rem);
   flex: 0 0 280px;
   overflow: hidden;
   @include box();

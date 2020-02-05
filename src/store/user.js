@@ -6,20 +6,33 @@ export default {
     user: {
       isAuth: false,
       _id: null,
+      role: null,
+      group: null,
+      name: null,
     },
   },
   mutations: {
     SET_USER: (state, payload) => {
       state.user.isAuth = true;
       state.user._id = payload._id;
+      state.user.role = payload.role;
+      state.user.group = payload.group;
+      state.user.name = payload.name;
       localStorage.setItem('role', payload.role);
       localStorage.setItem('name', payload.name);
+      localStorage.setItem('group', payload.group);
     },
     REMOVE_USER: (state) => {
       state.user = {
         isAuth: false,
         _id: null,
+        role: null,
+        group: null,
+        name: null,
       };
+      localStorage.removeItem('role');
+      localStorage.removeItem('name');
+      localStorage.removeItem('group');
     },
   },
   actions: {
@@ -35,7 +48,6 @@ export default {
         login: payload.login,
         password: payload.password,
       }).then((data) => {
-        console.log(data._id);
         commit('SET_USER', data);
       });
     },
@@ -46,6 +58,8 @@ export default {
         login: payload.login,
         password: payload.password,
         wordKey: payload.wordKey,
+        name: payload.name,
+        role: 'Teacher',
       });
     },
     stateChanged: ({ commit }, payload) => {
@@ -55,12 +69,15 @@ export default {
         commit('REMOVE_USER');
       }
     },
-    signOut: () => {
-
-    },
   },
   getters: {
     isUserAuth: (state) => state.user.isAuth,
     isUserUid: (state) => state.user.id,
+    currentUser: (state) => {
+      if (state.user.isAuth) {
+        return state.user;
+      }
+      return null;
+    },
   },
 };

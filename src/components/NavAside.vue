@@ -16,44 +16,52 @@
           Меню
         </li>
         <li class="vertical-list__item --active">
-          <a
-            href="#"
+          <router-link
+            to="/admin"
             aria-expanded="true"
           >
-            <span class="mdi mdi-clipboard-text-outline pos-left-null" />
-            Заявления
-            <span class="mdi mdi-chevron-up pos-right-null" />
-          </a>
-          <ul class="submenu">
-            <li class="submenu__item">
-              <a
-                class=""
-                href=""
-              >Новые</a>
-            </li>
-            <li class="submenu__item">
-              <a
-                class=""
-                href=""
-              >Активные</a>
-            </li>
-            <li class="submenu__item">
-              <a
-                class=""
-                href=""
-              >Завершённые</a>
-            </li>
-          </ul>
+            <span class="mdi mdi-chart-bar pos-left-null" />
+            Результаты
+            <!--<span class="mdi mdi-chevron-up pos-right-null" />-->
+          </router-link>
+          <router-link
+            to="/admin/test"
+            aria-expanded="true"
+          >
+            <span class="mdi mdi-chart-bar pos-left-null" />
+            Тесты
+            <!--<span class="mdi mdi-chevron-up pos-right-null" />-->
+          </router-link>
+          <!--<ul class="submenu">
+                      <li class="submenu__item">
+                        <a
+                          class=""
+                          href=""
+                        >Новые</a>
+                      </li>
+                      <li class="submenu__item">
+                        <a
+                          class=""
+                          href=""
+                        >Активные</a>
+                      </li>
+                      <li class="submenu__item">
+                        <a
+                          class=""
+                          href=""
+                        >Завершённые</a>
+                      </li>
+                    </ul>-->
         </li>
       </ul>
     </div>
     <footer class="sidebar__footer d-flex justify-content-center align-items-center">
-      <router-link
-        to="/"
+      <button
         class="btn btn-primary"
+        @click="exit"
       >
         Выход
-      </router-link>
+      </button>
     </footer>
   </aside>
 </template>
@@ -61,6 +69,12 @@
 <script>
 export default {
   name: 'NavAside',
+  methods: {
+    exit() {
+      this.$store.dispatch('stateChanged');
+      this.$router.push('/');
+    },
+  },
 };
 </script>
 

@@ -47,6 +47,8 @@
 </template>
 
 <script>
+import { Role } from '@/helpers/role';
+
 export default {
   name: 'StudentFormCard',
   data() {
@@ -58,7 +60,8 @@ export default {
   methods: {
     auth() {
       const { group, name } = this;
-      this.$store.dispatch('logInStudent', { group, name });
+      this.$store.dispatch('logInStudent', { group, name, role: Role.User });
+      this.$router.push('/user');
     },
   },
 };

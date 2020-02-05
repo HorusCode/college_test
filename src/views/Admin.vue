@@ -1,51 +1,39 @@
 <template>
-  <div class="home">
+  <div class="grid-main">
     <nav-aside />
     <main class="content">
-      <div class="box">
-        <header class="box-header">
-          <span class="header-title">Результаты студентов</span>
-          <div
-            id="clear"
-            class="btn"
-          >
-            Отчистить
-          </div>
-        </header>
-        <div class="box-body">
-          <div class="tbl">
-            <div class="tbl-header">
-              <table
-                class="table"
-                cellpadding="0"
-                cellspacing="0"
-                border="0"
-              >
-                <thead>
-                  <tr>
-                    <th>№</th>
-                    <th>Студент</th>
-                    <th>Группа</th>
-                    <th>Оценка</th>
-                    <th>Оставшееся время</th>
-                    <th>Дата</th>
-                    <th>Название теста</th>
-                  </tr>
-                </thead>
-              </table>
-            </div>
-            <div class="tbl-content">
-              <table
-                class="table"
-                cellpadding="0"
-                cellspacing="0"
-                border="0"
-              >
-                <tbody class="users-result" />
-              </table>
-            </div>
-          </div>
-        </div>
+      <header class="content__header">
+        <h2 class="text-title">
+          Результаты студентов
+        </h2>
+      </header>
+      <div class="content__body">
+        <table class="rwd-table">
+          <tr>
+            <th>Movie Title</th>
+            <th>Genre</th>
+            <th>Year</th>
+            <th>Gross</th>
+          </tr>
+          <tr>
+            <td data-th="Movie Title">Star Wars</td>
+            <td data-th="Genre">Adventure, Sci-fi</td>
+            <td data-th="Year">1977</td>
+            <td data-th="Gross">$460,935,665</td>
+          </tr>
+          <tr>
+            <td data-th="Movie Title">Howard The Duck</td>
+            <td data-th="Genre">"Comedy"</td>
+            <td data-th="Year">1986</td>
+            <td data-th="Gross">$16,295,774</td>
+          </tr>
+          <tr>
+            <td data-th="Movie Title">American Graffiti</td>
+            <td data-th="Genre">Comedy, Drama</td>
+            <td data-th="Year">1973</td>
+            <td data-th="Gross">$115,000,000</td>
+          </tr>
+        </table>
       </div>
     </main>
   </div>
@@ -55,7 +43,7 @@
 import NavAside from '../components/NavAside';
 
 export default {
-  name: 'Home',
+  name: 'Admin',
   components: {
     NavAside,
   },

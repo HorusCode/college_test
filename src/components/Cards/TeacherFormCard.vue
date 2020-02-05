@@ -50,6 +50,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'TeacherFormCard',
   data() {
@@ -61,7 +62,9 @@ export default {
   methods: {
     auth() {
       const { login, password } = this;
-      this.$store.dispatch('logInTeacher', { login, password });
+      this.$store.dispatch('logInTeacher', { login, password }).then(() => {
+        this.$router.push('/admin');
+      });
     },
   },
 };

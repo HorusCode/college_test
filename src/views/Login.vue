@@ -56,15 +56,17 @@ export default {
       openRegisterBtn: true,
     };
   },
-  computed: {
-    isUserAuth() {
-      return this.$store.getters.isUserAuth;
-    },
-  },
-  watch: {
-    isUserAuth(val) {
-      if (val === true) this.$router.push('/admin');
-    },
+  created() {
+    if (this.$store.getters.isUserAuth) {
+      switch (this.$store.getters.currentUser.role) {
+        case 'Student':
+          this.$router.push('/user');
+          break;
+        case 'Teacher':
+          this.$router.push('/admin');
+          break;
+      }
+    }
   },
   methods: {
     showForm(closeForm, openForm) {

@@ -18,6 +18,15 @@
         </div>
         <div class="input-effect">
           <input
+            v-model="name"
+            class="effect"
+            required
+          >
+          <span class="focus-border" />
+          <label>ФИО</label>
+        </div>
+        <div class="input-effect">
+          <input
             v-model="password"
             class="effect"
             required
@@ -71,14 +80,17 @@ export default {
       password: '',
       confirmPassword: '',
       wordKey: '',
+      name: '',
     };
   },
   methods: {
     register() {
       const {
-        login, password, wordKey,
+        login, password, wordKey, name,
       } = this;
-      this.$store.dispatch('registerTeacher', { login, password, wordKey });
+      this.$store.dispatch('registerTeacher', {
+        login, password, wordKey, name,
+      });
     },
   },
 };
