@@ -8,63 +8,61 @@
         </h2>
       </header>
       <div class="content__body">
-        <button class="btn btn-secondary size-1" @click="showModal = true">
+        <button
+          class="btn btn-secondary size-1"
+          @click="showModal = true"
+        >
           <i class="mdi mdi-plus" />
           Создать
         </button>
         <table class="rwd-table">
           <tr>
-            <th>Movie Title</th>
-            <th>Genre</th>
-            <th>Year</th>
-            <th>Gross</th>
+            <th>Название теста</th>
+            <th>Количество вопросов</th>
+            <th>Создан</th>
+            <th>Правлен</th>
+            <th>Действия</th>
           </tr>
-          <tr>
-            <td data-th="Movie Title">
-              Star Wars
+          <tr
+            v-for="(test, index) in tests"
+            :key="index"
+          >
+            <td>
+              {{ test.title }}
             </td>
-            <td data-th="Genre">
-              Adventure, Sci-fi
+            <td>
+              {{ test.questions.length }}
             </td>
-            <td data-th="Year">
-              1977
+            <td>
+              {{ test.createdAt }}
             </td>
-            <td data-th="Gross">
-              $460,935,665
+            <td>
+              {{ test.updatedAt }}
             </td>
-          </tr>
-          <tr>
-            <td data-th="Movie Title">
-              Howard The Duck
-            </td>
-            <td data-th="Genre">
-              "Comedy"
-            </td>
-            <td data-th="Year">
-              1986
-            </td>
-            <td data-th="Gross">
-              $16,295,774
-            </td>
-          </tr>
-          <tr>
-            <td data-th="Movie Title">
-              American Graffiti
-            </td>
-            <td data-th="Genre">
-              Comedy, Drama
-            </td>
-            <td data-th="Year">
-              1973
-            </td>
-            <td data-th="Gross">
-              $115,000,000
+            <td>
+              <button
+                class="btn btn-primary is-small width-1 m-0"
+                @click="updateModalTest(test)"
+              >
+                Редактировать
+              </button>
+              <button
+                class="btn btn-danger is-small width-1 m-0"
+                @click="updateModalTest(test)"
+              >
+                Удалить
+              </button>
             </td>
           </tr>
         </table>
       </div>
     </main>
-    <modal-create-test v-if="showModal" anim="slideDownLarge" @close="showModal = false"></modal-create-test>
+    <modal-create-test
+      v-if="showModal"
+      anim="slideDownLarge"
+      :updating-test="updatingTest"
+      @close="showModal = false"
+    />
   </div>
 </template>
 
@@ -81,10 +79,20 @@ export default {
   data() {
     return {
       showModal: false,
+      tests: [],
+      updatingTest: {},
     };
   },
+  mounted() {
+    this.$store.dispatch('loadTests').then((result) => {
+      this.tests = result;
+    });
+  },
   methods: {
-
+    updateModalTest(test) {
+      this.updatingTest = JSON.parse(JSON.stringify(test));
+      this.showModal = true;
+    },
   },
 };
 </script>

@@ -6,7 +6,10 @@
           <h2 class="text-title">
             Создание теста
           </h2>
-          <i class="mdi mdi-plus pos-right mdi-rotate-45 mdi-36px close"></i>
+          <i
+            class="mdi mdi-plus pos-right mdi-rotate-45 mdi-36px close"
+            @click="closeModal"
+          />
         </div>
         <div class="modal__content wrapper">
           <div class="card vertical mb-1">
@@ -34,9 +37,12 @@
           >
             <header class="card-header">
               <h3 class="text-title">
-                Вопрос №{{index + 1}}
+                Вопрос №{{ index + 1 }}
               </h3>
-              <i class="mdi mdi-plus pos-right mdi-rotate-45 mdi-36px"></i>
+              <i
+                class="mdi mdi-plus pos-right mdi-rotate-45 mdi-36px"
+                @click="deleteQuestion(index)"
+              />
             </header>
             <div class="card-content">
               <textarea
@@ -54,13 +60,13 @@
                   class="checkbox"
                 >
                   <input
-                    :id="`checkbox-${i}`"
+                    :id="`checkbox-${index}-${i}`"
                     v-model="answer.answer"
                     class="checkbox-custom"
                     type="checkbox"
                   >
                   <label
-                    :for="`checkbox-${i}`"
+                    :for="`checkbox-${index}-${i}`"
                     class="checkbox-custom-label"
                   >верный</label>
                   <div class="input-effect">
@@ -95,7 +101,10 @@
               >
                 Добавить вопрос
               </button>
-              <button class="btn btn-primary rounded">
+              <button
+                class="btn btn-primary rounded"
+                @click="saveTest"
+              >
                 Сохранить
               </button>
             </header>
@@ -109,33 +118,23 @@
 <script>
 export default {
   name: 'ModalCreateTest',
-  props: ['anim'],
+  props: ['anim', 'updatingTest'],
   data() {
     return {
       modal: null,
-
+      mode: 'create',
       test:
         {
           title: 'Название теста',
           questions: [
             {
-              name: 'Question Answer',
-
+              name: 'Вопрос',
               answers: [
                 {
                   text: 'Answer Text1',
                   answer: false,
                 },
-                {
-                  text: 'Answer Text2',
-                  answer: true,
-                },
-                {
-                  text: 'Answer Text3',
-                  answer: false,
-                },
               ],
-
             },
           ],
         },
@@ -143,6 +142,12 @@ export default {
     };
   },
   mounted() {
+    if (Object.keys(this.updatingTest).length !== 0) {
+      this.test = JSON.parse(JSON.stringify(this.updatingTest));
+      this.mode = 'update';
+    } else {
+      this.mode = 'create';
+    }
     this.modal = document.querySelector('.modal');
     this.modal.classList.remove('out');
     this.modal.classList.add(`${this.anim}`);
@@ -173,6 +178,20 @@ export default {
     },
     deleteAnswer(questionInd, answerInd) {
       this.test.questions[questionInd].answers.splice(answerInd, 1);
+    },
+    deleteQuestion(questionInd) {
+      this.test.questions.splice(questionInd, 1);
+    },
+    saveTest() {
+      // eslint-disable-next-line default-case
+      switch (this.mode) {
+        case 'create':
+          this.$store.dispatch('createTest', this.test);
+          break;
+        case 'update':
+          this.$store.dispatch('updateTest', { oldTest: this.updatingTest, newTest: this.test });
+          break;
+      }
     },
   },
 };

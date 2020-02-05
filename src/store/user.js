@@ -44,11 +44,12 @@ export default {
     logInTeacher({ commit }, payload) {
       commit('SET_PROCESSING', true);
       commit('REMOVE_ERROR', true);
-      db.teacher.findOne({
+      return db.teacher.findOne({
         login: payload.login,
         password: payload.password,
       }).then((data) => {
         commit('SET_USER', data);
+        return true;
       });
     },
     registerTeacher({ commit }, payload) {

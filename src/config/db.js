@@ -11,6 +11,7 @@ const dbFactory = (fileName) => Datastore.create({
 
 const db = {
   teacher: dbFactory('teacher.db'),
+  test: dbFactory('test.db'),
 };
 
 export default db;

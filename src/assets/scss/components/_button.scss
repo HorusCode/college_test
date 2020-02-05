@@ -39,6 +39,16 @@
       background-color: darken($secondary, 10);
     }
   }
+  &.btn-danger {
+    background-color: $danger;
+    &:hover {
+      background-color: lighten($danger, 10);
+    }
+    &:active {
+      background-color: darken($danger, 10);
+    }
+  }
+
   &.is-small {
     height: 30px;
   }
@@ -47,6 +57,7 @@
   }
   &.width-1 {
     width: 7rem;
+    font-size: .7em;
   }
   &.width-2 {
     width: 9rem;

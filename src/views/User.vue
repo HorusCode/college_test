@@ -8,13 +8,14 @@
         </h2>
       </header>
       <div class="content__body">
-
-
         <div class="select">
-          <input type="checkbox" class="options-view-button">
+          <input
+            type="checkbox"
+            class="options-view-button"
+          >
           <div class="select__button">
             <div class="selected__value">
-              <span>{{ selectedTest }}</span>
+              <span>{{ selectedTestTitle }}</span>
             </div>
             <div class="chevrons">
               <i class="mdi mdi-chevron-up" />
@@ -22,21 +23,17 @@
             </div>
           </div>
           <div class="options">
-            <div class="option">
-              <input class="option__radio" type="radio" value="kek" @click="select">
-              <span class="label">kek</span>
-            </div>
-            <div class="option">
-              <input class="option__radio" type="radio" value="qwe" @click="select">
-              <span class="label">qwe</span>
-            </div>
-            <div class="option">
-              <input class="option__radio" type="radio" value="asd" @click="select">
-              <span class="label">asd</span>
-            </div>
-            <div class="option">
-              <input class="option__radio" type="radio" value="zxc" @click="select">
-              <span class="label">zxc</span>
+            <div
+              v-for="(test, index) in tests"
+              :key="index"
+              class="option"
+            >
+              <input
+                class="option__radio"
+                type="radio"
+                @click="select(test)"
+              >
+              <span class="label">{{ test.title }}</span>
             </div>
           </div>
         </div>
@@ -63,12 +60,18 @@ export default {
   },
   data() {
     return {
-      selectedTest: 'Выберите тест',
+      selectedTestTitle: 'Выберите тест',
+      selectedTest: {},
+      tests: [],
     };
   },
+  mounted() {
+    console.log(this.$store.getters.getTests);
+    this.tests = this.$store.getters.getTests;
+  },
   methods: {
-    select(event) {
-      this.selectedTest = event.target.value;
+    select(test) {
+      this.selectedTestTitle = test.title;
       document.querySelector('.options-view-button').checked = false;
     },
   },
