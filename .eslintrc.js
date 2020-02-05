@@ -14,7 +14,7 @@ module.exports = {
       jsx: 'never',
       vue: 'never',
     }],
-    "no-underscore-dangle": 'off'
+    "no-underscore-dangle": 'off',
   },
   parserOptions: {
     parser: 'babel-eslint',

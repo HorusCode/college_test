@@ -39,7 +39,7 @@
     }
 
     &:checked + .checkbox-custom-label:before {
-      background: $accentThree;
+      background: $primary;
       box-shadow: inset 0 0 0 4px #fff;
     }
   }

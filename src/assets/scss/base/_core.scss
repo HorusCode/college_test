@@ -181,3 +181,17 @@ a {
     text-align: center;
   }
 }
+
+.wrapper {
+  width: 1000px;
+  margin: 0 auto;
+}
+
+.answers {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  .checkbox {
+    margin-bottom: 1rem;
+  }
+}

@@ -23,12 +23,12 @@ export default new Router({
       name: 'admin',
       component: Admin,
       meta: { authorize: [Role.Admin] },
-      children: [
-        {
-          path: 'test',
-          component: CreateTest,
-        },
-      ],
+    },
+    {
+      path: '/admin/test',
+      component: CreateTest,
+      name: 'create-test',
+      meta: { authorize: [Role.Admin] },
     },
     {
       path: '/user',

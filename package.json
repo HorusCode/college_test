@@ -45,6 +45,7 @@
     "sass-loader": "^8.0.0",
     "vue-chartjs": "^3.5.0",
     "vue-cli-plugin-electron-builder": "^1.4.4",
-    "vue-template-compiler": "^2.6.10"
+    "vue-template-compiler": "^2.6.10",
+    "vue-wysiwyg": "^1.7.2"
   }
 }

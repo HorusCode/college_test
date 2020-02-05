@@ -22,10 +22,15 @@
   }
 }
 
+.card-header {
+  position: relative;
+  padding: $grid-gap;
+}
+
 .card > .card-content {
   display: flex;
   flex-direction: column;
-  padding: 2rem;
+  padding: $grid-gap;
   flex: 1 1 auto;
 }
 

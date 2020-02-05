@@ -4,7 +4,7 @@
     <main class="content">
       <header class="content__header">
         <h2 class="text-title">
-          Результаты студентов
+          Результаты студентовв
         </h2>
       </header>
       <div class="content__body">
