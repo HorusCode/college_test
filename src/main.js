@@ -13,9 +13,6 @@ Vue.config.productionTip = false;
 new Vue({
   router,
   store,
-  created: () => {
-    store.dispatch('loadTests');
-  },
   render(h) {
     return h(App);
   },

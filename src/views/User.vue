@@ -42,20 +42,29 @@
         <button
           id="loadTest"
           class="btn btn-primary"
+          @click="showModal = true"
         >
           Начать
         </button>
       </div>
+      <modal-testing
+        v-if="showModal"
+        anim="slideDownLarge"
+        :test="selectedTest"
+        @close="showModal = false"
+      />
     </main>
   </div>
 </template>
 
 <script>
 import NavAside from '../components/NavAside';
+import ModalTesting from '../components/ModalTesting';
 
 export default {
   name: 'User',
   components: {
+    ModalTesting,
     NavAside,
   },
   data() {
@@ -63,15 +72,18 @@ export default {
       selectedTestTitle: 'Выберите тест',
       selectedTest: {},
       tests: [],
+      showModal: false,
     };
   },
-  mounted() {
-    console.log(this.$store.getters.getTests);
-    this.tests = this.$store.getters.getTests;
+  created() {
+    this.$store.dispatch('loadTests').then((result) => {
+      this.tests = result;
+    });
   },
   methods: {
     select(test) {
       this.selectedTestTitle = test.title;
+      this.selectedTest = test;
       document.querySelector('.options-view-button').checked = false;
     },
   },

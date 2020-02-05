@@ -19,6 +19,9 @@ export default {
       const idx = state.tests.findIndex((obj) => obj.id === payload.id);
       state.tests.splice(idx, 1);
     },
+    REMOVE_TESTS: (state) => {
+      state.tests = [];
+    },
   },
   actions: {
     loadTests({ commit }) {
@@ -48,6 +51,12 @@ export default {
     },
     deleteBook({ commit }, payload) {
       commit('setProcessing', true);
+    },
+    removeTests({ commit }) {
+      commit('SET_PROCESSING', true);
+      db.test.remove({}, { multi: true });
+      commit('REMOVE_TESTS');
+      commit('SET_PROCESSING', false);
     },
   },
   getters: {

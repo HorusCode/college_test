@@ -15,6 +15,13 @@
           <i class="mdi mdi-plus" />
           Создать
         </button>
+        <button
+                class="btn btn-danger size-1"
+                @click="removeTests"
+        >
+          <i class="mdi mdi-file-remove" />
+          Очистить
+        </button>
         <table class="rwd-table">
           <tr>
             <th>Название теста</th>
@@ -92,6 +99,9 @@ export default {
     updateModalTest(test) {
       this.updatingTest = JSON.parse(JSON.stringify(test));
       this.showModal = true;
+    },
+    removeTests() {
+      this.$store.dispatch('removeTests');
     },
   },
 };
