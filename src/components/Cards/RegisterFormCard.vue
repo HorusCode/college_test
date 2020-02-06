@@ -30,6 +30,7 @@
             v-model="password"
             class="effect"
             required
+            type="password"
           >
           <span class="focus-border" />
           <label>Пароль</label>
@@ -39,6 +40,7 @@
             v-model="confirmPassword"
             class="effect"
             required
+            type="password"
           >
           <span class="focus-border" />
           <label>Повторите пароль</label>
@@ -72,6 +74,8 @@
 </template>
 
 <script>
+  const { dialog } = require('electron').remote;
+
 export default {
   name: 'RegisterFormCard',
   data() {
@@ -90,6 +94,17 @@ export default {
       } = this;
       this.$store.dispatch('registerTeacher', {
         login, password, wordKey, name,
+      }).then(() => {
+        const error = this.$store.getters.getError;
+        if (error !== null) {
+          dialog.showMessageBox({
+            type: 'error',
+            title: 'Ошибка',
+            message: error.message,
+          });
+          return false;
+        }
+        return true;
       });
     },
   },

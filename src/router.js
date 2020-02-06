@@ -56,7 +56,7 @@ export default new Router({
       meta: { authorize: [Role.User] },
     },
     {
-      path: '/user/result',
+      path: '/user/results',
       name: 'results',
       component: Result,
       meta: { authorize: [Role.User] },

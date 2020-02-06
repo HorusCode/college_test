@@ -4,49 +4,30 @@
     <main class="content">
       <header class="content__header">
         <h2 class="text-title">
-          Выполнение тестов
+          Лекции
         </h2>
       </header>
       <div class="content__body">
-        <div class="select">
-          <input
-            type="checkbox"
-            class="options-view-button"
+        <table class="rwd-table">
+          <tr>
+            <th>Имя файла</th>
+            <th>Действия</th>
+          </tr>
+          <tr
+            v-for="(file, index) in files"
+            :key="index"
           >
-          <div class="select__button">
-            <div class="selected__value">
-              <span>{{ selectedFile }}</span>
-            </div>
-            <div class="chevrons">
-              <i class="mdi mdi-chevron-up" />
-              <i class="mdi mdi-chevron-down" />
-            </div>
-          </div>
-          <div class="options">
-            <div
-              v-for="(filename, index) in files"
-              :key="index"
-              class="option"
-            >
-              <input
-                class="option__radio"
-                type="radio"
-                @click="select(filename)"
+            <td>{{ file.name }}</td>
+            <td>
+              <button
+                class="btn btn-primary is-small width-1 m-0"
+                @click="openFile(file.dir)"
               >
-              <span class="label">{{ filename.split('.')[0] }}</span>
-            </div>
-          </div>
-        </div>
-
-
-        <button
-          id="loadTest"
-          class="btn btn-primary"
-          :disabled="activeBtn"
-          @click="openFile()"
-        >
-          Открыть
-        </button>
+                Открыть
+              </button>
+            </td>
+          </tr>
+        </table>
       </div>
     </main>
   </div>
@@ -56,7 +37,9 @@
 import NavAside from '../../components/NavAside';
 
 const fs = require('fs');
-const ipc = require('electron').ipcRenderer;
+const { shell } = require('electron');
+const appRoot = require('app-root-path');
+const path = require('path');
 
 export default {
   name: 'Lectures',
@@ -71,19 +54,22 @@ export default {
       activeBtn: true,
     };
   },
-  created() {
-    fs.readdir(`${__dirname}../../../pdf`, (err, files) => {
-      this.files = files;
+  mounted() {
+    fs.readdir(this.fileDir, (err, files) => {
+      files.forEach((file) => {
+        this.files.push({
+          name: file,
+          dir: this.fileDir + file,
+        });
+      });
     });
   },
+  created() {
+    this.fileDir = path.join(appRoot.path, '/pdf/');
+  },
   methods: {
-    select(filename) {
-      this.file = filename;
-      this.selectedFile = filename.split('.')[0];
-      this.activeBtn = false;
-    },
-    openFile() {
-      ipc.send('openNewWindow', `/pdf/${this.file}`);
+    openFile(dir) {
+      shell.openItem(dir);
     },
   },
 };

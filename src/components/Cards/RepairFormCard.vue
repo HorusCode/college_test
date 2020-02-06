@@ -6,7 +6,7 @@
           Введите <span class="text-primary">ключевое</span> слово
         </h3>
       </header>
-      <form>
+      <form @submit.prevent="repairPassword">
         <div class="input-effect">
           <input
             v-model="login"
@@ -45,6 +45,8 @@
 </template>
 
 <script>
+const { dialog } = require('electron').remote;
+
 export default {
   name: 'RepairFormCard',
   data() {
@@ -52,6 +54,29 @@ export default {
       login: '',
       wordKey: '',
     };
+  },
+  methods: {
+    repairPassword() {
+      const { login, wordKey } = this;
+      this.$store.dispatch('repairTeacher', { login, wordKey }).then((result) => {
+        const error = this.$store.getters.getError;
+        console.log(result);
+        if (error !== null) {
+          dialog.showMessageBox({
+            type: 'error',
+            title: 'Ошибка',
+            message: error.message,
+          });
+          return false;
+        }
+        dialog.showMessageBox({
+          type: 'info',
+          title: 'Пользователь найден',
+          message: `Ваш пароль ${result.password}`,
+        });
+        return true;
+      });
+    },
   },
 };
 </script>

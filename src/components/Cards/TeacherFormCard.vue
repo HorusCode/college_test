@@ -22,6 +22,7 @@
             class="effect"
             name="password"
             required
+            type="password"
           >
           <span class="focus-border" />
           <label>Пароль</label>
@@ -50,6 +51,7 @@
 </template>
 
 <script>
+const { dialog } = require('electron').remote;
 
 export default {
   name: 'TeacherFormCard',
@@ -63,7 +65,17 @@ export default {
     auth() {
       const { login, password } = this;
       this.$store.dispatch('logInTeacher', { login, password }).then(() => {
+        const error = this.$store.getters.getError;
+        if (error !== null) {
+          dialog.showMessageBox({
+            type: 'error',
+            title: 'Ошибка',
+            message: error.message,
+          });
+          return false;
+        }
         this.$router.push('/admin');
+        return true;
       });
     },
   },

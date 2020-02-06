@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import NavAside from '../../components/NavAside';
+import NavAside from '@/components/NavAside';
 
 export default {
   name: 'Result',

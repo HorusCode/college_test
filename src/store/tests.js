@@ -43,10 +43,9 @@ export default {
       commit('SET_PROCESSING', true);
       db.test.update({
         _id: payload.oldTest._id,
-      }, payload.newTest, { returnUpdatedDocs: true }).then((result, res, lel) => {
+      }, payload.newTest, { returnUpdatedDocs: true }).then((result) => {
         commit('SET_PROCESSING', false);
         commit('UPDATE_TESTS', result);
-        console.log(result);
       });
     },
     deleteTest({ commit }, payload) {

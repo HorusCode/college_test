@@ -48,20 +48,48 @@ export default {
         login: payload.login,
         password: payload.password,
       }).then((data) => {
+        if (data === null) {
+          commit('SET_ERROR', { message: 'Пользователь не найден!' });
+          return false;
+        }
         commit('SET_USER', data);
+        commit('REMOVE_ERROR');
         return true;
       });
     },
     registerTeacher({ commit }, payload) {
       commit('SET_PROCESSING', true);
-      commit('REMOVE_ERROR', true);
-      db.teacher.insert({
-        login: payload.login,
-        password: payload.password,
-        wordKey: payload.wordKey,
-        name: payload.name,
-        role: 'Teacher',
+      return db.teacher.find({ login: payload.login }).then((result) => {
+        if (result.length === 0) {
+          db.teacher.insert({
+            login: payload.login,
+            password: payload.password,
+            wordKey: payload.wordKey,
+            name: payload.name,
+            role: 'Teacher',
+          });
+          commit('REMOVE_ERROR');
+          commit('SET_PROCESSING', false);
+          return true;
+        }
+        commit('SET_ERROR', { message: 'Пользователь существует! Измените логин.' });
+        commit('SET_PROCESSING', false);
+        return false;
       });
+    },
+    repairTeacher({ commit }, payload) {
+      commit('SET_PROCESSING', true);
+      return db.teacher.findOne({ login: payload.login, wordKey: payload.wordKey })
+        .then((result) => {
+          if (result.length === 0) {
+            commit('SET_PROCESSING', false);
+            commit('SET_ERROR', { message: 'Такого пользователя нет.' });
+            return false;
+          }
+          commit('REMOVE_ERROR');
+          commit('SET_PROCESSING', false);
+          return result;
+        });
     },
     stateChanged: ({ commit }, payload) => {
       if (payload) {
