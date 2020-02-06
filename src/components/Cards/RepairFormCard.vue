@@ -1,5 +1,5 @@
 <template>
-  <div class="card repairForm login--form">
+  <div class="card repairForm">
     <div class="card-content">
       <header class="card-header">
         <h3 class="text-center mx-1">
@@ -36,7 +36,7 @@
             type="submit"
             class="btn btn-primary width-3"
           >
-            Востановить
+            Восстановить
           </button>
         </div>
       </form>

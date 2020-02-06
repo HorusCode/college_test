@@ -36,6 +36,12 @@
 .text-primary {
   color: $primary !important;
 }
+.text-secondary{
+  color: $secondary !important;
+}
+.text-green{
+  color: $green !important;
+}
 
 .text-white {
   color: $white !important;
@@ -64,9 +70,17 @@
   margin: 0;
 }
 
+.text-underline {
+  text-decoration: underline;
+}
+
 
 .font-normal {
   font-weight: normal;
+}
+
+.font-bold {
+  font-weight: bold;
 }
 
 

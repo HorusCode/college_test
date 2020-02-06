@@ -20,9 +20,9 @@ export default {
     },
   },
   actions: {
-    loadResults({ commit }) {
+    loadResults({ commit }, payload = {}) {
       commit('SET_PROCESSING', true);
-      return db.result.find({}).then((result) => {
+      return db.result.find(payload).then((result) => {
         commit('SET_RESULTS', result);
         commit('SET_PROCESSING', false);
         return result;

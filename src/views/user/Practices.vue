@@ -15,7 +15,7 @@
           >
           <div class="select__button">
             <div class="selected__value">
-              <span>{{ selectedTestTitle }}</span>
+              <span>{{ selectedFile }}</span>
             </div>
             <div class="chevrons">
               <i class="mdi mdi-chevron-up" />
@@ -24,16 +24,16 @@
           </div>
           <div class="options">
             <div
-              v-for="(test, index) in tests"
+              v-for="(filename, index) in files"
               :key="index"
               class="option"
             >
               <input
                 class="option__radio"
                 type="radio"
-                @click="select(test)"
+                @click="select(filename)"
               >
-              <span class="label">{{ test.title }}</span>
+              <span class="label">{{ filename.split('.')[0] }}</span>
             </div>
           </div>
         </div>
@@ -42,49 +42,48 @@
         <button
           id="loadTest"
           class="btn btn-primary"
-          @click="showModal = true"
+          :disabled="activeBtn"
+          @click="openFile()"
         >
-          Начать
+          Открыть
         </button>
       </div>
-      <modal-testing
-        v-if="showModal"
-        anim="slideDownLarge"
-        :test="selectedTest"
-        @close="showModal = false"
-      />
     </main>
   </div>
 </template>
 
 <script>
-import NavAside from '../components/NavAside';
-import ModalTesting from '../components/ModalTesting';
+import NavAside from '../../components/NavAside';
+
+const fs = require('fs');
+const ipc = require('electron').ipcRenderer;
 
 export default {
-  name: 'User',
+  name: 'Practices',
   components: {
-    ModalTesting,
     NavAside,
   },
   data() {
     return {
-      selectedTestTitle: 'Выберите тест',
-      selectedTest: {},
-      tests: [],
-      showModal: false,
+      files: [],
+      selectedFile: '',
+      file: '',
+      activeBtn: true,
     };
   },
   created() {
-    this.$store.dispatch('loadTests').then((result) => {
-      this.tests = result;
+    fs.readdir(`${__dirname}../../../ppt`, (err, files) => {
+      this.files = files;
     });
   },
   methods: {
-    select(test) {
-      this.selectedTestTitle = test.title;
-      this.selectedTest = test;
-      document.querySelector('.options-view-button').checked = false;
+    select(filename) {
+      this.file = filename;
+      this.selectedFile = filename.split('.')[0];
+      this.activeBtn = false;
+    },
+    openFile() {
+      ipc.send('openNewWindow', `/ppt/${this.file}`);
     },
   },
 };

@@ -15,3 +15,10 @@
   height: inherit;
   width: inherit;
 }
+
+.grid-modal-testing {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-column-gap: $grid-gap;
+}
+

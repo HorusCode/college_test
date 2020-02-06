@@ -74,8 +74,8 @@
 </template>
 
 <script>
-import NavAside from '../components/NavAside';
-import ModalCreateTest from '../components/ModalCreateTest';
+import NavAside from '../../components/NavAside';
+import ModalCreateTest from '../../components/ModalCreateTest';
 
 export default {
   name: 'CreateTest',

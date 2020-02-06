@@ -17,7 +17,7 @@
           <h1 class="text-title text-primary">
             College Test
           </h1>
-          <h3 class="text-subtitle text-secondary">
+          <h3 class="text-subtitle">
             Система тестирования студентов
           </h3>
         </header>
@@ -32,7 +32,7 @@
         v-show="openRegisterBtn"
         class="btn btn-primary rounded size-1"
         @click="showForm(activeForm, '.registerForm')"
-      >Зарегистрироваться преподователю</span>
+      >Зарегистрироваться преподавателю</span>
     </footer>
   </div>
 </template>

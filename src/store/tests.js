@@ -49,7 +49,7 @@ export default {
         console.log(result);
       });
     },
-    deleteBook({ commit }, payload) {
+    deleteTest({ commit }, payload) {
       commit('setProcessing', true);
     },
     removeTests({ commit }) {

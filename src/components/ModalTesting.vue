@@ -1,17 +1,18 @@
 <template>
-  <div class="modal">
-    <div class="modal-container full-page">
-      <div class="modal__card">
-        <div class="modal__header">
-          <h2 class="text-title">
-            Решение теста
-          </h2>
-          <i
-            class="mdi mdi-plus pos-right mdi-rotate-45 mdi-36px close"
-            @click="closeModal"
-          />
-        </div>
-        <div class="modal__content wrapper">
+  <div class="modal full-page">
+    <div class="modal__card">
+      <div class="modal__header">
+        <h2 class="text-title">
+          Решение теста
+        </h2>
+        <i
+          v-show="activeBtn"
+          class="mdi mdi-plus pos-right mdi-rotate-45 mdi-36px close"
+          @click="closeModal"
+        />
+      </div>
+      <div class="modal__content grid-modal-testing">
+        <div class="g-1_2">
           <div class="card vertical mb-1">
             <header class="card-header">
               <h3 class="text-title">
@@ -31,12 +32,11 @@
               </h3>
             </header>
             <div class="card-content">
-              <textarea
-                v-model="questions.name"
-                class="txt-full"
-                rows="4"
-                placeholder="Вопрос..."
-              />
+              <div class="question-text">
+                <p>
+                  {{ questions.name }}
+                </p>
+              </div>
               <div
                 class="answers"
               >
@@ -50,21 +50,12 @@
                     class="checkbox-custom"
                     type="checkbox"
                     :value="answer.answer"
+                    :disabled="activeBtn"
                   >
                   <label
                     :for="`checkbox-${index}-${i}`"
-                    class="checkbox-custom-label"
-                  >верный</label>
-                  <div class="input-effect">
-                    <input
-                      v-model="answer.text"
-                      class="effect"
-                      type="text"
-                      required
-                    >
-                    <label>Ответ</label>
-                    <span class="focus-border" />
-                  </div>
+                    class="checkbox-custom-label text-primary text-underline"
+                  >{{ answer.text }}</label>
                 </div>
               </div>
             </div>
@@ -73,11 +64,45 @@
             <header class="card-header d-flex justify-content-around">
               <button
                 class="btn btn-primary rounded"
+                :disabled="activeBtn"
                 @click="calcAnswers"
               >
                 Завершить
               </button>
             </header>
+          </div>
+        </div>
+        <div class="g-1_2">
+          <div class="card vertical mb-1">
+            <header class="card-header">
+              <h3 class="text-title">
+                Статус
+              </h3>
+            </header>
+          </div>
+          <div class="card vertical mb-1">
+            <div class="card-content">
+              <ul class="vertical-list">
+                <li class="vertical-list__heading">
+                  Данные
+                </li>
+                <li class="vertical-list__item">
+                  <span class="text-secondary text-subtitle ">ФИО:</span> {{ student }}
+                </li>
+                <li class="vertical-list__item">
+                  <span class="text-secondary text-subtitle ">Группа:</span> {{ group }}
+                </li>
+                <li class="vertical-list__item">
+                  <span class="text-secondary text-subtitle ">Время:</span>
+                  <span class="font-bold"> {{ timer }}</span>
+                </li>
+                <li class="vertical-list__item">
+                  <span class="text-green text-subtitle text-underline ">
+                    Оценка: <span class="font-bold"> {{ scoreStudent }}</span>
+                  </span>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -92,16 +117,24 @@ export default {
   data() {
     return {
       modal: null,
-      scoreStudent: '2',
+      scoreStudent: '',
       score: 0,
       totalTrueAnswers: 0,
       totalPercent: 0,
+      timer: '00:00',
+      activeBtn: false,
+      interval: null,
+      student: '',
+      group: '',
     };
   },
   mounted() {
     this.modal = document.querySelector('.modal');
     this.modal.classList.remove('out');
     this.modal.classList.add(`${this.anim}`);
+    this.student = localStorage.getItem('name');
+    this.group = localStorage.getItem('group');
+    this.countDown(15);
   },
   methods: {
     closeModal() {
@@ -109,6 +142,30 @@ export default {
       this.modal.addEventListener('animationend', () => {
         this.$emit('close');
       }, false);
+      Object.assign(this.$data, {
+        scoreStudent: '',
+        score: 0,
+        totalTrueAnswers: 0,
+        totalPercent: 0,
+        timer: '00:00',
+        activeBtn: false,
+      });
+    },
+
+    countDown(min) {
+      let seconds = min * 60 + 1;
+      this.interval = setInterval(() => {
+        if (seconds > 0) {
+          seconds -= 1;
+          const h = seconds / 3600 ^ 0;
+          const m = (seconds - h * 3600) / 60 ^ 0;
+          const s = seconds - h * 3600 - m * 60;
+          this.timer = `${m < 10 ? `0${m}` : m}:${s < 10 ? `0${s}` : s}`;
+        } else {
+          this.calcAnswers();
+          clearInterval(this.interval);
+        }
+      }, 1000);
     },
 
     // TODO: Delete and rewrite AALLL calc code :(
@@ -118,8 +175,8 @@ export default {
         const totalCheckedInBox = document.querySelectorAll(`.card[data-id="${i}"] .checkbox-custom:checked`);
         let scoreIncrement = 0;
         totalCheckedInBox.forEach((item) => {
-          const elVal = parseInt(item.value);
-          if (elVal === 0) {
+          const elVal = `${true}` === item.value;
+          if (!elVal) {
             scoreIncrement = 0;
             return;
           }
@@ -130,15 +187,12 @@ export default {
       this.calcTotalTrueAnswers();
       this.calcPercent();
       this.createResult();
+      clearInterval(this.interval);
     },
     calcTotalTrueAnswers() {
-      document.querySelectorAll('.checkbox-custom:checked')
-        .forEach((item) => {
-          const elVal = parseInt(item.value);
-          if (elVal === 1) {
-            this.totalTrueAnswers += 1;
-          }
-        });
+      document.querySelectorAll(".checkbox-custom[value='true']").forEach(() => {
+        this.totalTrueAnswers += 1;
+      });
     },
     calcPercent() {
       this.totalPercent = this.score * 100 / this.totalTrueAnswers;
@@ -159,26 +213,16 @@ export default {
     },
     createResult() {
       const data = {
-        student: localStorage.getItem('name'),
-        group: localStorage.getItem('group'),
+        student: this.student,
+        group: this.group,
         result: this.scoreStudent,
-        time: '123',
+        time: this.timer,
         date: (new Date()).toString().split(' ').splice(1, 4)
           .join(' '),
         test: this.test.title,
       };
       this.$store.dispatch('createResult', data);
-    },
-    saveTest() {
-      // eslint-disable-next-line default-case
-      switch (this.mode) {
-        case 'create':
-          this.$store.dispatch('createTest', this.test);
-          break;
-        case 'update':
-          this.$store.dispatch('updateTest', { oldTest: this.updatingTest, newTest: this.test });
-          break;
-      }
+      this.activeBtn = true;
     },
   },
 };

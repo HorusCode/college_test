@@ -9,21 +9,26 @@
     color: $primary;
     white-space: nowrap;
   }
-  &__item > a {
+  &__item{
     display: block;
     line-height: 2.5rem;
     height: 2.5rem;
-    padding: 0 1.5rem 0 1.95rem;
     position: relative;
-    border-radius: 2rem;
-    color: #6c757d;
-    white-space: nowrap;
-    transition: all .2s;
-    margin: .1rem 0;
-    cursor: pointer;
-    &:hover, &.router-link-exact-active  {
-      color: $primary;
+    .link {
+      display: block;
+      padding: 0 1.5rem 0 1.95rem;
+      position: relative;
+      border-radius: 2rem;
+      color: #6c757d;
+      white-space: nowrap;
+      transition: all .2s;
+      margin: .1rem 0;
+      cursor: pointer;
+      &:hover, &.router-link-exact-active  {
+        color: $primary;
+      }
     }
+
   }
   .pos-left {
     left: 0;
