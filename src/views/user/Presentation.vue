@@ -38,7 +38,6 @@ import NavAside from '../../components/NavAside';
 
 const fs = require('fs');
 const { shell } = require('electron');
-const appRoot = require('app-root-path');
 const path = require('path');
 
 export default {
@@ -65,7 +64,7 @@ export default {
     });
   },
   created() {
-    this.fileDir = path.join(appRoot.path, '/ppt/');
+    this.fileDir = path.join(this.$path, '/ppt');
   },
   methods: {
     openFile(dir) {

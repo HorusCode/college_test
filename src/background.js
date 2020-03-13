@@ -5,6 +5,9 @@ import {
   installVueDevtools,
 } from 'vue-cli-plugin-electron-builder/lib';
 
+const url = require('url');
+const path = require('path');
+
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -25,7 +28,6 @@ function createWindow() {
       nodeIntegration: true,
     },
   });
-
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
@@ -35,7 +37,13 @@ function createWindow() {
   } else {
     createProtocol('app');
     // Load the index.html when not in development
-    win.loadURL('file://../index.html');
+    win.loadURL(
+      url.format({
+        pathname: path.join(__dirname, '/index.html'),
+        protocol: 'file:',
+        slashes: true,
+      }),
+    );
   }
 
   win.on('closed', () => {

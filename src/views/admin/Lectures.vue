@@ -56,12 +56,13 @@
 <script>
 import NavAside from '../../components/NavAside';
 
+
 const { shell } = require('electron');
 const path = require('path');
+
 const fs = require('fs');
-const { dialog } = require('electron').remote;
+const { dialog, app } = require('electron').remote;
 const { ncp } = require('ncp');
-const appRoot = require('app-root-path');
 
 
 export default {
@@ -86,7 +87,7 @@ export default {
     });
   },
   created() {
-    this.fileDir = path.join(appRoot.path, '/pdf/');
+    this.fileDir = path.join(this.$path, '/pdf');
     if (!fs.existsSync(this.fileDir)) {
       fs.mkdirSync(this.fileDir);
     }
@@ -121,9 +122,7 @@ export default {
           const dirArr = value.split('\\');
           const fileName = dirArr[dirArr.length - 1];
           ncp(value.toString(), this.fileDir + fileName, (err) => {
-            if (err) {
-              dialog.showErrorBox('Ошибка', 'Обратитесь разработчику или попробуйте переимновать файл!');
-            } else if (i === folderPaths.length - 1) {
+            if (i === folderPaths.length - 1) {
               dialog.showMessageBox({
                 type: 'info',
                 title: 'Успех',

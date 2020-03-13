@@ -1,5 +1,5 @@
 <template>
-  <div class="card studentForm login--form">
+  <div class="card loginForm login--form">
     <div class="card-content">
       <header class="card-header">
         <h3 class="text-center mx-1">
@@ -9,29 +9,30 @@
       <form @submit.prevent="auth">
         <div class="input-effect">
           <input
-            v-model="group"
+            v-model="email"
             type="text"
             class="effect"
             required
           >
           <span class="focus-border" />
-          <label>Группа</label>
+          <label>Email</label>
         </div>
         <div class="input-effect">
           <input
-            v-model="name"
+            v-model="password"
             class="effect"
             name="name"
+            type="password"
             required
           >
           <span class="focus-border" />
-          <label>ФИО</label>
+          <label>Пароль</label>
         </div>
         <div class="d-flex justify-content-center">
           <span
             class="label-link"
-            @click="$emit('showform', '.studentForm','.teacherForm')"
-          >Войти как преподаватель</span>
+            @click="$emit('showform', '.loginForm','.repairForm')"
+          >Вспомнить пароль</span>
         </div>
         <div class="d-flex align-items-center justify-content-center mx-1">
           <button
@@ -50,17 +51,17 @@
 import { Role } from '@/helpers/role';
 
 export default {
-  name: 'StudentFormCard',
+  name: 'LoginFormCard',
   data() {
     return {
-      group: '',
-      name: '',
+      email: '',
+      password: '',
     };
   },
   methods: {
     auth() {
-      const { group, name } = this;
-      this.$store.dispatch('logInStudent', { group, name, role: Role.User });
+      const { email, password } = this;
+      this.$store.dispatch('logIn', { email, password, role: Role.User });
       this.$router.push('/user');
     },
   },

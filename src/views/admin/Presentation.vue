@@ -61,7 +61,6 @@ const path = require('path');
 const fs = require('fs');
 const { dialog } = require('electron').remote;
 const { ncp } = require('ncp');
-const appRoot = require('app-root-path');
 
 
 export default {
@@ -86,7 +85,7 @@ export default {
     });
   },
   created() {
-    this.fileDir = path.join(appRoot.path, '/ppt/');
+    this.fileDir = path.join(this.$path, '/ppt');
     if (!fs.existsSync(this.fileDir)) {
       fs.mkdirSync(this.fileDir);
     }
@@ -113,6 +112,7 @@ export default {
         title: 'Выбрать файлы',
         filters: [{ name: 'PowerPoint', extensions: ['ppt', 'pptx'] }],
         properties: ['multiSelections'],
+
       }, (folderPaths) => {
         if (folderPaths === undefined) {
           return false;
@@ -121,9 +121,7 @@ export default {
           const dirArr = value.split('\\');
           const fileName = dirArr[dirArr.length - 1];
           ncp(value.toString(), this.fileDir + fileName, (err) => {
-            if (err) {
-              dialog.showErrorBox('Ошибка', 'Обратитесь разработчику или попробуйте переимновать файл!');
-            } else if (i === folderPaths.length - 1) {
+            if (i === folderPaths.length - 1) {
               dialog.showMessageBox({
                 type: 'info',
                 title: 'Успех',

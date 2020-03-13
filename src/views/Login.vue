@@ -22,24 +22,16 @@
           </h3>
         </header>
         <student-form-card @showform="showForm" />
-        <teacher-form-card @showform="showForm" />
         <repair-form-card @showform="showForm" />
         <register-form-card @showform="showForm" />
       </div>
     </div>
-    <footer class="login-footer">
-      <span
-        v-show="openRegisterBtn"
-        class="btn btn-primary rounded size-1"
-        @click="showForm(activeForm, '.registerForm')"
-      >Зарегистрироваться преподавателю</span>
-    </footer>
   </div>
 </template>
 
 <script>
 import anime from 'animejs';
-import StudentFormCard from '../components/Cards/StudentFormCard';
+import StudentFormCard from '../components/Cards/LoginFormCard';
 import TeacherFormCard from '../components/Cards/TeacherFormCard';
 import RepairFormCard from '../components/Cards/RepairFormCard';
 import RegisterFormCard from '../components/Cards/RegisterFormCard';
@@ -48,16 +40,17 @@ import RegisterFormCard from '../components/Cards/RegisterFormCard';
 export default {
   name: 'Login',
   components: {
-    RegisterFormCard, RepairFormCard, TeacherFormCard, StudentFormCard,
+    RegisterFormCard, RepairFormCard, StudentFormCard,
   },
   data() {
     return {
-      activeForm: '.studentForm',
+      activeForm: '.loginForm',
       openRegisterBtn: true,
     };
   },
   created() {
     if (this.$store.getters.isUserAuth) {
+      // eslint-disable-next-line default-case
       switch (this.$store.getters.currentUser.role) {
         case 'Student':
           this.$router.push('/user');

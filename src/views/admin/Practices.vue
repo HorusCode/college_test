@@ -8,10 +8,7 @@
         </h2>
       </header>
       <div class="content__body">
-        <button
-          class="btn btn-danger size-1"
-          @click="removeFiles"
-        >
+        <button class="btn btn-danger size-1" @click="removeFiles">
           <i class="mdi mdi-file-remove" />
           Очистить
         </button>
@@ -61,7 +58,6 @@ const path = require('path');
 const fs = require('fs');
 const { dialog } = require('electron').remote;
 const { ncp } = require('ncp');
-const appRoot = require('app-root-path');
 
 export default {
   name: 'Practices',
@@ -85,7 +81,7 @@ export default {
     });
   },
   created() {
-    this.fileDir = path.join(appRoot.path, '/word/');
+    this.fileDir = path.join(this.$path, '/word');
     if (!fs.existsSync(this.fileDir)) {
       fs.mkdirSync(this.fileDir);
     }
@@ -93,7 +89,7 @@ export default {
   methods: {
     removeFiles() {
       this.files = [];
-      fs.readdir(this.fileDir, (err, files) => {
+      fs.readdir(__dirname, (err, files) => {
         files.forEach((file) => {
           fs.unlink(this.fileDir + file, () => {
           });
@@ -120,9 +116,7 @@ export default {
           const dirArr = value.split('\\');
           const fileName = dirArr[dirArr.length - 1];
           ncp(value.toString(), this.fileDir + fileName, (err) => {
-            if (err) {
-              dialog.showErrorBox('Ошибка', 'Обратитесь разработчику или попробуйте переимновать файл!');
-            } else if (i === folderPaths.length - 1) {
+            if (i === folderPaths.length - 1) {
               dialog.showMessageBox({
                 type: 'info',
                 title: 'Успех',
