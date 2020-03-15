@@ -1,6 +1,6 @@
 <template>
   <div class="grid-main">
-    <nav-aside />
+    <NavAside />
     <main class="content">
       <header class="content__header">
         <h2 class="text-title">
@@ -12,10 +12,7 @@
           <i class="mdi mdi-file-remove" />
           Очистить
         </button>
-        <button
-          class="btn btn-secondary size-1 width-3"
-          @click="loadFile"
-        >
+        <button class="btn btn-secondary size-1 width-3" @click="loadFile">
           <i class="mdi mdi-file" />
           Загрузить
         </button>
@@ -24,10 +21,7 @@
             <th>Имя файла</th>
             <th>Действия</th>
           </tr>
-          <tr
-            v-for="(file, index) in files"
-            :key="index"
-          >
+          <tr v-for="(file, index) in files" :key="index">
             <td>{{ file.name }}</td>
             <td>
               <button
@@ -36,10 +30,7 @@
               >
                 Удалить
               </button>
-              <button
-                class="btn btn-primary is-small width-1 m-0"
-                @click="openFile(file.dir)"
-              >
+              <button class="btn btn-primary is-small width-1 m-0" @click="openFile(file.dir)">
                 Окрыть
               </button>
             </td>
@@ -51,28 +42,28 @@
 </template>
 
 <script>
-import NavAside from '../../components/NavAside';
+import NavAside from "../../components/NavAside";
 
-const { shell } = require('electron');
-const path = require('path');
-const fs = require('fs');
-const { dialog } = require('electron').remote;
-const { ncp } = require('ncp');
+const { shell } = require("electron");
+const path = require("path");
+const fs = require("fs");
+const { dialog } = require("electron").remote;
+const { ncp } = require("ncp");
 
 export default {
-  name: 'Practices',
+  name: "Practices",
   components: {
     NavAside,
   },
   data() {
     return {
       files: [],
-      fileDir: '',
+      fileDir: "",
     };
   },
   mounted() {
     fs.readdir(this.fileDir, (err, files) => {
-      files.forEach((file) => {
+      files.forEach(file => {
         this.files.push({
           name: file,
           dir: this.fileDir + file,
@@ -81,7 +72,7 @@ export default {
     });
   },
   created() {
-    this.fileDir = path.join(this.$path, '/word');
+    this.fileDir = path.join(this.$path, "/word");
     if (!fs.existsSync(this.fileDir)) {
       fs.mkdirSync(this.fileDir);
     }
@@ -90,9 +81,8 @@ export default {
     removeFiles() {
       this.files = [];
       fs.readdir(__dirname, (err, files) => {
-        files.forEach((file) => {
-          fs.unlink(this.fileDir + file, () => {
-          });
+        files.forEach(file => {
+          fs.unlink(this.fileDir + file, () => {});
         });
       });
     },
@@ -104,32 +94,35 @@ export default {
       this.files.splice(i, 1);
     },
     loadFile() {
-      dialog.showOpenDialog({
-        title: 'Выбрать файлы',
-        filters: [{ name: 'Word', extensions: ['docx', 'doc'] }],
-        properties: ['multiSelections'],
-      }, (folderPaths) => {
-        if (folderPaths === undefined) {
-          return false;
-        }
-        folderPaths.forEach((value, i) => {
-          const dirArr = value.split('\\');
-          const fileName = dirArr[dirArr.length - 1];
-          ncp(value.toString(), this.fileDir + fileName, (err) => {
-            if (i === folderPaths.length - 1) {
-              dialog.showMessageBox({
-                type: 'info',
-                title: 'Успех',
-                message: 'Файл успешно перемещён!',
-              });
-            }
+      dialog.showOpenDialog(
+        {
+          title: "Выбрать файлы",
+          filters: [{ name: "Word", extensions: ["docx", "doc"] }],
+          properties: ["multiSelections"],
+        },
+        folderPaths => {
+          if (folderPaths === undefined) {
+            return false;
+          }
+          folderPaths.forEach((value, i) => {
+            const dirArr = value.split("\\");
+            const fileName = dirArr[dirArr.length - 1];
+            ncp(value.toString(), this.fileDir + fileName, err => {
+              if (i === folderPaths.length - 1) {
+                dialog.showMessageBox({
+                  type: "info",
+                  title: "Успех",
+                  message: "Файл успешно перемещён!",
+                });
+              }
+            });
+            this.files.push({
+              name: fileName,
+              dir: this.fileDir + fileName,
+            });
           });
-          this.files.push({
-            name: fileName,
-            dir: this.fileDir + fileName,
-          });
-        });
-      });
+        },
+      );
     },
   },
 };

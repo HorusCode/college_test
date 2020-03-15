@@ -5,10 +5,7 @@
         <h2 class="text-title">
           Создание теста
         </h2>
-        <i
-          class="mdi mdi-plus pos-right mdi-rotate-45 mdi-36px close"
-          @click="closeModal"
-        />
+        <i class="mdi mdi-plus pos-right mdi-rotate-45 mdi-36px close" @click="closeModal" />
       </div>
       <div class="modal__content wrapper">
         <div class="card vertical mb-1">
@@ -19,11 +16,7 @@
           </header>
           <div class="card-content">
             <div class="input-effect">
-              <input
-                v-model="test.title"
-                class="effect"
-                required
-              >
+              <input v-model="test.title" class="effect" required />
               <span class="focus-border" />
               <label>Название теста</label>
             </div>
@@ -35,75 +28,42 @@
           class="card vertical mb-1"
         >
           <header class="card-header">
-            <h3 class="text-title">
-              Вопрос №{{ index + 1 }}
-            </h3>
+            <h3 class="text-title">Вопрос №{{ index + 1 }}</h3>
             <i
               class="mdi mdi-plus pos-right mdi-rotate-45 mdi-36px"
               @click="deleteQuestion(index)"
             />
           </header>
           <div class="card-content">
-            <textarea
-              v-model="questions.name"
-              class="txt-full"
-              rows="4"
-              placeholder="Вопрос..."
-            />
-            <div
-              class="answers"
-            >
-              <div
-                v-for="(answer, i) in questions.answers"
-                :key="`answer-${i}`"
-                class="checkbox"
-              >
+            <textarea v-model="questions.name" class="txt-full" rows="4" placeholder="Вопрос..." />
+            <div class="answers">
+              <div v-for="(answer, i) in questions.answers" :key="`answer-${i}`" class="checkbox">
                 <input
                   :id="`checkbox-${index}-${i}`"
                   v-model="answer.answer"
                   class="checkbox-custom"
                   type="checkbox"
-                >
-                <label
-                  :for="`checkbox-${index}-${i}`"
-                  class="checkbox-custom-label"
-                >верный</label>
+                />
+                <label :for="`checkbox-${index}-${i}`" class="checkbox-custom-label">верный</label>
                 <div class="input-effect">
-                  <input
-                    v-model="answer.text"
-                    class="effect"
-                    type="text"
-                    required
-                  >
+                  <input v-model="answer.text" class="effect" type="text" required />
                   <label>Ответ</label>
                   <span class="focus-border" />
                 </div>
-                <i
-                  class="mdi mdi-plus deleteAnswer"
-                  @click="deleteAnswer(index, i)"
-                />
+                <i class="mdi mdi-plus deleteAnswer" @click="deleteAnswer(index, i)" />
               </div>
             </div>
-            <button
-              class="btn btn-secondary size-1"
-              @click="addAnswer(index)"
-            >
+            <button class="btn btn-secondary size-1" @click="addAnswer(index)">
               Добавить ответ
             </button>
           </div>
         </div>
         <div class="card vertical mb-1">
           <header class="card-header d-flex justify-content-around">
-            <button
-              class="btn btn-secondary rounded"
-              @click="addQuestion"
-            >
+            <button class="btn btn-secondary rounded" @click="addQuestion">
               Добавить вопрос
             </button>
-            <button
-              class="btn btn-primary rounded"
-              @click="saveTest"
-            >
+            <button class="btn btn-primary rounded" @click="saveTest">
               Сохранить
             </button>
           </header>
@@ -115,54 +75,56 @@
 
 <script>
 export default {
-  name: 'ModalCreateTest',
-  props: ['anim', 'updatingTest'],
+  name: "ModalCreateTest",
+  props: ["anim", "updatingTest"],
   data() {
     return {
       modal: null,
-      mode: 'create',
-      test:
-        {
-          title: 'Название теста',
-          questions: [
-            {
-              name: 'Вопрос',
-              answers: [
-                {
-                  text: 'Answer Text1',
-                  answer: false,
-                },
-              ],
-            },
-          ],
-        },
-
+      mode: "create",
+      test: {
+        title: "Название теста",
+        questions: [
+          {
+            name: "Вопрос",
+            answers: [
+              {
+                text: "Answer Text1",
+                answer: false,
+              },
+            ],
+          },
+        ],
+      },
     };
   },
   mounted() {
     if (Object.keys(this.updatingTest).length !== 0) {
       this.test = JSON.parse(JSON.stringify(this.updatingTest));
-      this.mode = 'update';
+      this.mode = "update";
     } else {
-      this.mode = 'create';
+      this.mode = "create";
     }
-    this.modal = document.querySelector('.modal');
-    this.modal.classList.remove('out');
+    this.modal = document.querySelector(".modal");
+    this.modal.classList.remove("out");
     this.modal.classList.add(`${this.anim}`);
   },
   methods: {
     closeModal() {
-      this.modal.classList.add('out');
-      this.modal.addEventListener('animationend', () => {
-        this.$emit('close');
-      }, false);
+      this.modal.classList.add("out");
+      this.modal.addEventListener(
+        "animationend",
+        () => {
+          this.$emit("close");
+        },
+        false,
+      );
     },
     addQuestion() {
       this.test.questions.push({
-        name: 'Question Answer',
+        name: "Question Answer",
         answers: [
           {
-            text: '',
+            text: "",
             answer: false,
           },
         ],
@@ -170,7 +132,7 @@ export default {
     },
     addAnswer(i) {
       this.test.questions[i].answers.push({
-        text: 'Answer Text1',
+        text: "Answer Text1",
         answer: false,
       });
     },
@@ -183,11 +145,14 @@ export default {
     saveTest() {
       // eslint-disable-next-line default-case
       switch (this.mode) {
-        case 'create':
-          this.$store.dispatch('createTest', this.test);
+        case "create":
+          this.$store.dispatch("createTest", this.test);
           break;
-        case 'update':
-          this.$store.dispatch('updateTest', { oldTest: this.updatingTest, newTest: this.test });
+        case "update":
+          this.$store.dispatch("updateTest", {
+            oldTest: this.updatingTest,
+            newTest: this.test,
+          });
           break;
       }
     },
@@ -196,7 +161,7 @@ export default {
 </script>
 
 <style scoped>
-  .checkbox .input-effect {
-    margin: 0;
-  }
+.checkbox .input-effect {
+  margin: 0;
+}
 </style>

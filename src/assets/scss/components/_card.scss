@@ -1,9 +1,7 @@
 .card {
   display: flex;
-  background-color: #fff;
-  border-radius: .2rem;
   overflow: hidden;
-  box-shadow: 0 3px 14px 0 #0000001a;
+  @include box();
   &.vertical {
     flex-direction: column;
   }

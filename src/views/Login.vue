@@ -1,15 +1,9 @@
 <template>
-  <div
-    id="login"
-    class="grid-login bg--orange-gradient"
-  >
+  <div id="login" class="grid-login bg--orange-gradient">
     <div class="card rad-1 login-card">
       <div class="card-media">
         <div class="image">
-          <img
-            :src="require('../assets/image/login-image.jpg')"
-            alt="Login please"
-          >
+          <img :src="require('../assets/image/login-image.jpg')" alt="Login please" />
         </div>
       </div>
       <div class="card-content">
@@ -21,65 +15,54 @@
             Система тестирования студентов
           </h3>
         </header>
-        <student-form-card @showform="showForm" />
-        <repair-form-card @showform="showForm" />
-        <register-form-card @showform="showForm" />
+        <LoginFormCard @showform="showForm" />
+        <CodeFormCard @showform="showForm" />
+        <EmailFormCard @showform="showForm" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import anime from 'animejs';
-import StudentFormCard from '../components/Cards/LoginFormCard';
-import TeacherFormCard from '../components/Cards/TeacherFormCard';
-import RepairFormCard from '../components/Cards/RepairFormCard';
-import RegisterFormCard from '../components/Cards/RegisterFormCard';
-
+import anime from "animejs";
+import LoginFormCard from "../components/Cards/LoginFormCard";
+import EmailFormCard from "../components/Cards/EmailFormCard";
+import CodeFormCard from "../components/Cards/CodeFormCard";
 
 export default {
-  name: 'Login',
+  name: "Login",
   components: {
-    RegisterFormCard, RepairFormCard, StudentFormCard,
+    CodeFormCard,
+    EmailFormCard,
+    LoginFormCard,
   },
   data() {
     return {
-      activeForm: '.loginForm',
+      activeForm: ".loginForm",
       openRegisterBtn: true,
     };
   },
-  created() {
-    if (this.$store.getters.isUserAuth) {
-      // eslint-disable-next-line default-case
-      switch (this.$store.getters.currentUser.role) {
-        case 'Student':
-          this.$router.push('/user');
-          break;
-        case 'Teacher':
-          this.$router.push('/admin');
-          break;
-      }
-    }
-  },
   methods: {
     showForm(closeForm, openForm) {
-      this.openRegisterBtn = openForm !== '.registerForm';
+      this.openRegisterBtn = openForm !== ".registerForm";
       this.activeForm = openForm;
       const forms = anime.timeline({
         duration: 750,
-        easing: 'easeInOutBack',
+        easing: "easeInOutBack",
       });
-      forms.add({
-        targets: closeForm,
-        translateX: '150%',
-        complete: () => {
-          document.querySelector(openForm).style.display = 'flex';
-          document.querySelector(closeForm).style.display = 'none';
-        },
-      }).add({
-        targets: openForm,
-        translateX: ['150%', '0%'],
-      });
+      forms
+        .add({
+          targets: closeForm,
+          translateX: "150%",
+          complete: () => {
+            document.querySelector(openForm).style.display = "flex";
+            document.querySelector(closeForm).style.display = "none";
+          },
+        })
+        .add({
+          targets: openForm,
+          translateX: ["150%", "0%"],
+        });
     },
   },
 };

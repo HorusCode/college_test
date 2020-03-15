@@ -6,6 +6,7 @@
 @import '~@mdi/font/css/materialdesignicons.min.css';
 
 
+
 // Variables and settings
 @import 'base/variables';
 @import "base/settings";
@@ -28,9 +29,15 @@
 @import "components/content";
 @import "components/footer";
 @import "components/modal";
-@import "components/select";
 @import "components/table";
+@import "components/divider";
+@import "components/dropdown";
+@import "components/preloader";
+@import "components/alert";
 @import "components/checkbox";
+@import "components/radio";
+@import "components/form";
+@import "components/select";
 
 // @import "../css/animate.css";
 

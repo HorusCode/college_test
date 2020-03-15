@@ -1,4 +1,4 @@
-import db from '../config/db';
+import Api from "@/helpers/api";
 
 export default {
   state: {
@@ -12,37 +12,39 @@ export default {
       state.results.push(payload);
     },
     DELETE_RESULTS: (state, payload) => {
-      const idx = state.results.findIndex((obj) => obj.id === payload.id);
+      const idx = state.results.findIndex(obj => obj.id === payload.id);
       state.results.splice(idx, 1);
     },
-    REMOVE_RESULTS: (state) => {
+    REMOVE_RESULTS: state => {
       state.results = [];
     },
   },
   actions: {
-    loadResults({ commit }, payload = {}) {
-      commit('SET_PROCESSING', true);
-      return db.result.find(payload).then((result) => {
-        commit('SET_RESULTS', result);
-        commit('SET_PROCESSING', false);
-        return result;
-      });
+    loadResults({ commit }) {
+      commit("SET_PROCESSING", true);
+      Api.get("/ratings")
+        .then(response => {
+          commit("SET_RESULTS", response.data.data);
+        })
+        .finally(() => {
+          commit("SET_PROCESSING", false);
+        });
     },
     createResult({ commit }, payload) {
-      commit('SET_PROCESSING', true);
-      db.result.insert(payload).then((result) => {
-        commit('ADD_RESULTS', result);
-        commit('SET_PROCESSING', false);
+      commit("SET_PROCESSING", true);
+      db.result.insert(payload).then(result => {
+        commit("ADD_RESULTS", result);
+        commit("SET_PROCESSING", false);
       });
     },
     removeResults({ commit }) {
-      commit('SET_PROCESSING', true);
+      commit("SET_PROCESSING", true);
       db.result.remove({}, { multi: true });
-      commit('REMOVE_RESULTS');
-      commit('SET_PROCESSING', false);
+      commit("REMOVE_RESULTS");
+      commit("SET_PROCESSING", false);
     },
   },
   getters: {
-    getResults: (state) => state.results,
+    getResults: state => state.results,
   },
 };

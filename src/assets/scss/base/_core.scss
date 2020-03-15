@@ -5,14 +5,20 @@
   padding: 0;
   outline: none;
   box-sizing: border-box;
+  &:before,
+  &:after {
+    box-sizing: border-box;
+  }
 }
 
 html, body {
   height: 100%;
+  -webkit-font-smoothing: antialiased;
 }
 
 #app {
-  height: inherit;
+  min-height: 100%;
+  height: 100%;
   width: inherit;
 }
 
@@ -53,20 +59,28 @@ a {
   box-shadow: 0 8px 14px 1px #0000007a;
   position: relative;
   .login--form {
-    margin-top: 20%;
+    background: none;
+    box-shadow: none;
+  }
+  .input-label {
+    color: $primary;
   }
 }
 
-.login-footer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 .login-card > .card-media {
   flex: 1 0 60%;
 }
 .login-card > .card-content {
   flex: 1 0 40%;
+}
+
+
+.label-link {
+  display: block;
+  color: $link;
+  text-align: right;
+  font-weight: 500;
+  cursor: pointer;
 }
 
 
@@ -76,7 +90,7 @@ a {
   color: $primary;
 }
 
-.repairForm, .teacherForm, .registerForm {
+.emailForm, .codeForm {
   transform: translateX(150%);
   display: none;
 }

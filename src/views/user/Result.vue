@@ -1,6 +1,6 @@
 <template>
   <div class="grid-main">
-    <nav-aside />
+    <NavAside />
     <main class="content">
       <header class="content__header">
         <h2 class="text-title">
@@ -17,10 +17,7 @@
             <th>Время</th>
             <th>Когда решал</th>
           </tr>
-          <tr
-            v-for="(result, index) in results"
-            :key="index"
-          >
+          <tr v-for="(result, index) in results" :key="index">
             <td>{{ result.student }}</td>
             <td>{{ result.group }}</td>
             <td>{{ result.test }}</td>
@@ -35,10 +32,10 @@
 </template>
 
 <script>
-import NavAside from '@/components/NavAside';
+import NavAside from "@/components/NavAside";
 
 export default {
-  name: 'Result',
+  name: "Result",
   components: {
     NavAside,
   },
@@ -48,13 +45,11 @@ export default {
     };
   },
   mounted() {
-    this.$store.dispatch('loadResults', { student: localStorage.getItem('name') }).then((result) => {
+    this.$store.dispatch("loadResults", { student: localStorage.getItem("name") }).then(result => {
       this.results = result;
     });
   },
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
