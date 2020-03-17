@@ -42,6 +42,11 @@ export default {
       openRegisterBtn: true,
     };
   },
+  computed: {
+    isUserAuth() {
+      return this.$store.getters.isUserAuth;
+    },
+  },
   methods: {
     showForm(closeForm, openForm) {
       this.openRegisterBtn = openForm !== ".registerForm";

@@ -2,9 +2,7 @@
   <div class="modal full-page">
     <div class="modal__card">
       <div class="modal__header">
-        <h2 class="text-title">
-          Создание теста
-        </h2>
+        <h2 class="text-title">Создание теста</h2>
         <i class="mdi mdi-plus pos-right mdi-rotate-45 mdi-36px close" @click="closeModal" />
       </div>
       <div class="modal__content wrapper">
@@ -14,11 +12,14 @@
               {{ test.title }}
             </h3>
           </header>
-          <div class="card-content">
-            <div class="input-effect">
-              <input v-model="test.title" class="effect" required />
-              <span class="focus-border" />
-              <label>Название теста</label>
+          <div class="card-content flex-row justify-content-between">
+            <div class="input-line">
+              <label class="input-label">Название теста</label>
+              <input v-model="test.title" type="text" class="input" />
+            </div>
+            <div class="input-line">
+              <label class="input-label">Время прохождения</label>
+              <input v-model="test.time" v-mask="timemask" type="text" class="input" />
             </div>
           </div>
         </div>
@@ -35,7 +36,13 @@
             />
           </header>
           <div class="card-content">
-            <textarea v-model="questions.name" class="txt-full" rows="4" placeholder="Вопрос..." />
+            <VueEditor
+              v-model="questions.name"
+              class="mb-1"
+              use-custom-image-handler
+              @image-added="uploadImage"
+              @image-removed="removeImage"
+            ></VueEditor>
             <div class="answers">
               <div v-for="(answer, i) in questions.answers" :key="`answer-${i}`" class="checkbox">
                 <input
@@ -45,12 +52,20 @@
                   type="checkbox"
                 />
                 <label :for="`checkbox-${index}-${i}`" class="checkbox-custom-label">верный</label>
-                <div class="input-effect">
-                  <input v-model="answer.text" class="effect" type="text" required />
-                  <label>Ответ</label>
-                  <span class="focus-border" />
+                <div class="input-line">
+                  <div class="input-group">
+                    <input
+                      v-model="answer.text"
+                      class="input default transparent square"
+                      type="text"
+                      required
+                    />
+                    <i
+                      class="mdi pos-right mdi-plus mdi-rotate-45 c-pointer"
+                      @click="deleteAnswer(index, i)"
+                    />
+                  </div>
                 </div>
-                <i class="mdi mdi-plus deleteAnswer" @click="deleteAnswer(index, i)" />
               </div>
             </div>
             <button class="btn btn-secondary size-1" @click="addAnswer(index)">
@@ -74,15 +89,30 @@
 </template>
 
 <script>
+import { VueEditor } from "vue2-editor";
+import Api from "@/helpers/api";
+import { mask } from "vue-the-mask";
+
 export default {
   name: "ModalCreateTest",
+  components: { VueEditor },
+  directives: { mask },
   props: ["anim", "updatingTest"],
   data() {
     return {
       modal: null,
       mode: "create",
+      timemask: {
+        mask: "A#:B#:B#",
+        tokens: {
+          A: { pattern: /[0-2]/ },
+          B: { pattern: /[0-6]/ },
+          "#": { pattern: /[0-9]/ },
+        },
+      },
       test: {
         title: "Название теста",
+        time: "00:15:00",
         questions: [
           {
             name: "Вопрос",
@@ -149,12 +179,26 @@ export default {
           this.$store.dispatch("createTest", this.test);
           break;
         case "update":
-          this.$store.dispatch("updateTest", {
-            oldTest: this.updatingTest,
-            newTest: this.test,
-          });
+          this.$store.dispatch("updateTest", this.test);
           break;
       }
+    },
+    uploadImage: function(file, Editor, cursorLocation, resetUploader) {
+      let formData = new FormData();
+      formData.append("files[]", file);
+      Api.post("/upload/image", formData)
+        .then(result => {
+          let url = result.data.data[0];
+          Editor.insertEmbed(cursorLocation, "image", url);
+          resetUploader();
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    removeImage: function(file) {
+      let name = file.split("/").pop();
+      Api.delete("/delete/testing/" + name);
     },
   },
 };

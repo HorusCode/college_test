@@ -29,7 +29,7 @@
                 <td>{{ result.user.group }}</td>
                 <td>{{ result.title }}</td>
                 <td>{{ result.rate }}</td>
-                <td>{{ result.date }}</td>
+                <td>{{ moment.utc(result.date).format("HH:mm DD.MM.YY") }}</td>
               </tr>
             </tbody>
           </table>
@@ -41,14 +41,16 @@
 
 <script>
 import NavAside from "../../components/NavAside";
-
+import moment from "moment";
 export default {
   name: "Admin",
   components: {
     NavAside,
   },
   data() {
-    return {};
+    return {
+      moment,
+    };
   },
   computed: {
     results() {

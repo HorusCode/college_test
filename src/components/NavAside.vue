@@ -76,6 +76,11 @@ export default {
             class: "mdi-test-tube-empty",
           },
           {
+            path: "/admin/groups",
+            title: "Группы",
+            class: "mdi-account-group-outline",
+          },
+          {
             path: "/admin/practices",
             title: "Практические",
             class: "mdi-file-document-box-outline",

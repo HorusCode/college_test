@@ -8,6 +8,7 @@ import CreateTest from "./views/admin/CreateTest";
 import AdminLecture from "./views/admin/Lectures";
 import AdminPresentation from "./views/admin/Presentation";
 import AdminPractice from "./views/admin/Practices";
+import AdminGroups from "./views/admin/Groups";
 import UserLecture from "./views/user/Lectures";
 import UserPractice from "./views/user/Practices";
 import UserPresentation from "./views/user/Presentation";
@@ -83,6 +84,12 @@ export default new Router({
       path: "/admin/presentation",
       name: "admin-presentation",
       component: AdminPresentation,
+      meta: { authorize: [Role.Admin] },
+    },
+    {
+      path: "/admin/groups",
+      name: "admin-groups",
+      component: AdminGroups,
       meta: { authorize: [Role.Admin] },
     },
   ],

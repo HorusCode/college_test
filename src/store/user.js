@@ -65,6 +65,19 @@ export default {
         commit("REMOVE_USER");
       }
     },
+    async stateUserChanged({ commit }) {
+      commit("SET_PROCESSING", true);
+      await Api.get("/user/me")
+        .then(response => {
+          commit("SET_USER", response.data);
+        })
+        .catch(error => {
+          commit("SET_ERROR", error.response.data);
+        })
+        .finally(() => {
+          commit("SET_PROCESSING", false);
+        });
+    },
   },
   getters: {
     isUserAuth: state => state.user.isAuth,

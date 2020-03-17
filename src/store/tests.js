@@ -1,3 +1,5 @@
+import Api from "@/helpers/api";
+
 export default {
   state: {
     tests: [],
@@ -24,36 +26,43 @@ export default {
   actions: {
     loadTests({ commit }) {
       commit("SET_PROCESSING", true);
-      return db.test.find({}).then(result => {
-        commit("SET_TESTS", result);
-        commit("SET_PROCESSING", false);
-        return result;
-      });
+      Api.get("/tests")
+        .then(response => {
+          commit("SET_TESTS", response.data);
+        })
+        .finally(() => {
+          commit("SET_PROCESSING", false);
+        });
     },
     createTest({ commit }, payload) {
       commit("SET_PROCESSING", true);
-      db.test.insert(payload).then(result => {
-        commit("ADD_TESTS", result);
-        commit("SET_PROCESSING", false);
-      });
+      Api.post("/tests", payload)
+        .then(response => {
+          commit("ADD_TESTS", response.data.data);
+        })
+        .finally(() => {
+          commit("SET_PROCESSING", false);
+        });
     },
     updateTest({ commit }, payload) {
       commit("SET_PROCESSING", true);
-      db.test
-        .update(
-          {
-            _id: payload.oldTest._id,
-          },
-          payload.newTest,
-          { returnUpdatedDocs: true },
-        )
-        .then(result => {
+      Api.put(`/tests/${payload.id}`, payload)
+        .then(response => {
+          commit("UPDATE_TESTS", response.data.data);
+        })
+        .finally(() => {
           commit("SET_PROCESSING", false);
-          commit("UPDATE_TESTS", result);
         });
     },
     deleteTest({ commit }, payload) {
-      commit("setProcessing", true);
+      commit("SET_PROCESSING", true);
+      Api.delete(`/tests/${payload.id}`)
+        .then(response => {
+          commit("DELETE_TEST", response.data.id);
+        })
+        .finally(() => {
+          commit("SET_PROCESSING", false);
+        });
     },
     removeTests({ commit }) {
       commit("SET_PROCESSING", true);
