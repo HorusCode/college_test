@@ -1,6 +1,6 @@
 <template>
   <div class="grid-main">
-    <nav-aside />
+    <NavAside />
     <main class="content">
       <header class="content__header">
         <h2 class="text-title">
@@ -9,10 +9,7 @@
       </header>
       <div class="content__body">
         <div class="select">
-          <input
-            type="checkbox"
-            class="options-view-button"
-          >
+          <input type="checkbox" class="options-view-button" />
           <div class="select__button">
             <div class="selected__value">
               <span>{{ selectedTestTitle }}</span>
@@ -23,21 +20,12 @@
             </div>
           </div>
           <div class="options">
-            <div
-              v-for="(test, index) in tests"
-              :key="index"
-              class="option"
-            >
-              <input
-                class="option__radio"
-                type="radio"
-                @click="select(test)"
-              >
+            <div v-for="(test, index) in tests" :key="index" class="option">
+              <input class="option__radio" type="radio" @click="select(test)" />
               <span class="label">{{ test.title }}</span>
             </div>
           </div>
         </div>
-
 
         <button
           id="loadTest"
@@ -48,7 +36,7 @@
           Начать
         </button>
       </div>
-      <modal-testing
+      <ModalTesting
         v-if="showModal"
         anim="slideDownLarge"
         :test="selectedTest"
@@ -59,18 +47,18 @@
 </template>
 
 <script>
-import NavAside from '../../components/NavAside';
-import ModalTesting from '../../components/ModalTesting';
+import NavAside from "../../components/NavAside";
+import ModalTesting from "../../components/ModalTesting";
 
 export default {
-  name: 'User',
+  name: "User",
   components: {
     ModalTesting,
     NavAside,
   },
   data() {
     return {
-      selectedTestTitle: 'Выберите тест',
+      selectedTestTitle: "Выберите тест",
       selectedTest: {},
       tests: [],
       showModal: false,
@@ -78,7 +66,7 @@ export default {
     };
   },
   created() {
-    this.$store.dispatch('loadTests').then((result) => {
+    this.$store.dispatch("loadTests").then(result => {
       this.tests = result;
     });
   },
@@ -87,7 +75,7 @@ export default {
       this.selectedTestTitle = test.title;
       this.selectedTest = test;
       this.activeBtn = false;
-      document.querySelector('.options-view-button').checked = false;
+      document.querySelector(".options-view-button").checked = false;
     },
   },
 };

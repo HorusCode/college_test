@@ -16,12 +16,12 @@
         <li class="vertical-list__item --active">
           <router-link
             v-for="(link, index) in activeLinks"
-            class="link"
             :key="index"
+            class="link"
             :to="link.path"
             aria-expanded="true"
           >
-            <span class="mdi pos-left-null" :class="link.class"/>
+            <span class="mdi pos-left-null" :class="link.class" />
             {{ link.title }}
             <!--<span class="mdi mdi-chevron-up pos-right-null" />-->
           </router-link>
@@ -49,10 +49,7 @@
       </ul>
     </div>
     <footer class="sidebar__footer d-flex justify-content-center align-items-center">
-      <button
-        class="btn btn-primary"
-        @click="exit"
-      >
+      <button class="btn btn-primary" @click="exit">
         Выход
       </button>
     </footer>
@@ -60,65 +57,70 @@
 </template>
 
 <script>
-import { Role } from '@/helpers/role';
+import { Role } from "@/helpers/role";
 
 export default {
-  name: 'NavAside',
+  name: "NavAside",
   data() {
     return {
       routerLinks: {
         admin: [
           {
-            path: '/admin',
-            title: 'Результаты',
-            class: 'mdi-chart-bar',
+            path: "/admin",
+            title: "Результаты",
+            class: "mdi-chart-bar",
           },
           {
-            path: '/admin/test',
-            title: 'Тесты',
-            class: 'mdi-test-tube-empty',
+            path: "/admin/test",
+            title: "Тесты",
+            class: "mdi-test-tube-empty",
           },
           {
-            path: '/admin/practices',
-            title: 'Практические',
-            class: 'mdi-file-document-box-outline',
+            path: "/admin/groups",
+            title: "Группы",
+            class: "mdi-account-group-outline",
           },
           {
-            path: '/admin/lectures',
-            title: 'Лекции',
-            class: 'mdi-file-cabinet',
+            path: "/admin/practices",
+            title: "Практические",
+            class: "mdi-file-document-box-outline",
           },
           {
-            path: '/admin/presentation',
-            title: 'Презентации',
-            class: 'mdi-file-powerpoint-outline',
+            path: "/admin/lectures",
+            title: "Лекции",
+            class: "mdi-file-cabinet",
+          },
+          {
+            path: "/admin/presentation",
+            title: "Презентации",
+            class: "mdi-file-powerpoint-outline",
           },
         ],
         user: [
           {
-            path: '/user',
-            title: 'Тестирование',
-            class: 'mdi-test-tube',
+            path: "/user",
+            title: "Тестирование",
+            class: "mdi-test-tube",
           },
           {
-            path: '/user/results',
-            title: 'Мои результаты',
-            class: 'mdi-chart-bar',
+            path: "/user/results",
+            title: "Мои результаты",
+            class: "mdi-chart-bar",
           },
           {
-            path: '/user/practices',
-            title: 'Практические',
-            class: 'mdi-file-document-box-outline',
+            path: "/user/practices",
+            title: "Практические",
+            class: "mdi-file-document-box-outline",
           },
           {
-            path: '/user/lectures',
-            title: 'Лекции',
-            class: 'mdi-file-cabinet',
+            path: "/user/lectures",
+            title: "Лекции",
+            class: "mdi-file-cabinet",
           },
           {
-            path: '/user/presentation',
-            title: 'Презентации',
-            class: 'mdi-file-powerpoint-outline',
+            path: "/user/presentation",
+            title: "Презентации",
+            class: "mdi-file-powerpoint-outline",
           },
         ],
       },
@@ -126,14 +128,14 @@ export default {
     };
   },
   mounted() {
-    const role = localStorage.getItem('role');
-    const type = Object.keys(Role).find((key) => Role[key] === role);
+    const role = localStorage.getItem("role");
+    const type = Object.keys(Role).find(key => Role[key] === role);
     this.activeLinks = this.routerLinks[type.toLowerCase()];
   },
   methods: {
     exit() {
-      this.$store.dispatch('stateChanged');
-      this.$router.push('/');
+      this.$store.dispatch("stateChanged");
+      this.$router.push("/");
     },
   },
 };

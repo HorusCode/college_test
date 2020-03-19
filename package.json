@@ -13,7 +13,8 @@
     "electron:build": "vue-cli-service electron:build NODE_ENV=production --windows --ia32",
     "electron:serve": "vue-cli-service electron:serve NODE_ENV=development",
     "postinstall": "electron-builder install-app-deps",
-    "postuninstall": "electron-builder install-app-deps"
+    "postuninstall": "electron-builder install-app-deps",
+    "format": "prettier-eslint --write \"{,!(node_modules)/**/}*.{js,jsx,vue}\""
   },
   "main": "background.js",
   "dependencies": {
@@ -34,23 +35,26 @@
     "@vue/cli-plugin-eslint": "^3.12.0",
     "@vue/cli-plugin-unit-mocha": "^3.12.0",
     "@vue/cli-service": "^3.12.0",
-    "@vue/eslint-config-airbnb": "^5.0.2",
     "@vue/test-utils": "1.0.0-beta.29",
     "animejs": "^3.1.0",
-    "babel-eslint": "^10.0.1",
+    "babel-eslint": "^10.1.0",
     "chai": "^4.1.2",
     "electron": "^6.0.0",
-    "eslint": "^5.16.0",
-    "eslint-plugin-vue": "^5.0.0",
-    "ncp": "^2.0.0",
-    "nedb-promises": "^4.0.1",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-loader": "^3.0.3",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-vue": "^6.2.2",
+    "moment": "^2.24.0",
+    "ncp": "^2.0",
     "node-sass": "^4.12.0",
     "normalize.css": "^8.0.1",
-    "prettier": "^1.18.2",
+    "prettier": "^1.19.1",
     "sass-loader": "^8.0.0",
     "vue-chartjs": "^3.5.0",
     "vue-cli-plugin-electron-builder": "^1.4.4",
     "vue-template-compiler": "^2.6.10",
-    "vue-wysiwyg": "^1.7.2"
+    "vue-the-mask": "^0.11.1",
+    "vue2-editor": "^2.10.2"
   }
 }

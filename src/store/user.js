@@ -1,112 +1,79 @@
-import db from '../config/db';
-
+import Api from "@/helpers/api";
 
 export default {
   state: {
-    user: {
-      isAuth: false,
-      _id: null,
-      role: null,
-      group: null,
-      name: null,
-    },
+    user: {},
+    status: "",
+    token: localStorage.getItem("authtoken") || "",
   },
   mutations: {
     SET_USER: (state, payload) => {
       state.user.isAuth = true;
-      state.user._id = payload._id;
-      state.user.role = payload.role;
-      state.user.group = payload.group;
-      state.user.name = payload.name;
-      localStorage.setItem('role', payload.role);
-      localStorage.setItem('name', payload.name);
-      localStorage.setItem('group', payload.group);
+      state.user = payload.user;
+      localStorage.setItem("role", payload.role);
+      localStorage.setItem("group", state.user.group);
+      localStorage.setItem("authtoken", payload.token);
     },
-    REMOVE_USER: (state) => {
-      state.user = {
-        isAuth: false,
-        _id: null,
-        role: null,
-        group: null,
-        name: null,
-      };
-      localStorage.removeItem('role');
-      localStorage.removeItem('name');
-      localStorage.removeItem('group');
+    REMOVE_USER: state => {
+      state.user = {};
+      state.status = "";
+      localStorage.removeItem("role");
+      localStorage.removeItem("name");
+      localStorage.removeItem("authtoken");
     },
-  },
+    AUTH_REQUEST: (state) => {
+      state.status = 'loading'
+    },
+    AUTH_SUCCESS: (state, token, user) => {
+      state.status = 'success';
+      state.token = token;
+      state.user = user;
+    },
+    AUTH_ERROR: (state) => {
+      state.status = 'error'
+    },
   actions: {
-    logInStudent({ commit }, payload) {
-      commit('SET_PROCESSING', true);
-      commit('REMOVE_ERROR', true);
-      commit('SET_USER', payload);
-    },
-    logInTeacher({ commit }, payload) {
-      commit('SET_PROCESSING', true);
-      commit('REMOVE_ERROR', true);
-      return db.teacher.findOne({
-        login: payload.login,
+    async logIn({ commit }, payload) {
+      commit("SET_PROCESSING", true);
+      commit("REMOVE_ERROR", true);
+      await Api.post("/login", {
+        email: payload.email,
         password: payload.password,
-      }).then((data) => {
-        if (data === null) {
-          commit('SET_ERROR', { message: 'Пользователь не найден!' });
-          return false;
-        }
-        commit('SET_USER', data);
-        commit('REMOVE_ERROR');
-        return true;
-      });
-    },
-    registerTeacher({ commit }, payload) {
-      commit('SET_PROCESSING', true);
-      return db.teacher.find({ login: payload.login }).then((result) => {
-        if (result.length === 0) {
-          db.teacher.insert({
-            login: payload.login,
-            password: payload.password,
-            wordKey: payload.wordKey,
-            name: payload.name,
-            role: 'Teacher',
-          });
-          commit('REMOVE_ERROR');
-          commit('SET_PROCESSING', false);
-          return true;
-        }
-        commit('SET_ERROR', { message: 'Пользователь существует! Измените логин.' });
-        commit('SET_PROCESSING', false);
-        return false;
-      });
-    },
-    repairTeacher({ commit }, payload) {
-      commit('SET_PROCESSING', true);
-      return db.teacher.findOne({ login: payload.login, wordKey: payload.wordKey })
-        .then((result) => {
-          if (result.length === 0) {
-            commit('SET_PROCESSING', false);
-            commit('SET_ERROR', { message: 'Такого пользователя нет.' });
-            return false;
-          }
-          commit('REMOVE_ERROR');
-          commit('SET_PROCESSING', false);
-          return result;
+      })
+        .then(response => {
+          commit("SET_USER", response.data);
+        })
+        .catch(error => {
+          commit("SET_ERROR", error.response.data.errors);
+        })
+        .finally(() => {
+          commit("SET_PROCESSING", false);
         });
     },
     stateChanged: ({ commit }, payload) => {
       if (payload) {
-        commit('SET_USER', payload);
+        commit("SET_USER", payload);
       } else {
-        commit('REMOVE_USER');
+        commit("REMOVE_USER");
       }
+    },
+    stateUserChanged({ commit }) {
+      commit("SET_PROCESSING", true);
+      Api.get("/user/me")
+        .then(response => {
+          commit("SET_USER", response.data);
+        })
+        .catch(error => {
+          commit("SET_ERROR", error.response.data);
+        })
+        .finally(() => {
+          commit("SET_PROCESSING", false);
+        });
     },
   },
   getters: {
-    isUserAuth: (state) => state.user.isAuth,
-    isUserUid: (state) => state.user.id,
-    currentUser: (state) => {
-      if (state.user.isAuth) {
-        return state.user;
-      }
-      return null;
-    },
+    isUserAuth: state => !!state.token,
+    getAuthStatus: state => state.status,
+    isUserUid: state => state.user.id,
   },
 };

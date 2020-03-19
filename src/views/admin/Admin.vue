@@ -1,6 +1,6 @@
 <template>
   <div class="grid-main">
-    <nav-aside />
+    <NavAside />
     <main class="content">
       <header class="content__header">
         <h2 class="text-title">
@@ -8,59 +8,67 @@
         </h2>
       </header>
       <div class="content__body">
-        <button
-          class="btn btn-danger size-1"
-          @click="removeResults"
-        >
+        <button class="btn btn-danger size-1" @click="loadResults">
           <i class="mdi mdi-file-remove" />
           Очистить
         </button>
-        <table class="rwd-table">
-          <tr>
-            <th>Имя</th>
-            <th>Группа</th>
-            <th>Тест</th>
-            <th>Оценка</th>
-            <th>Время</th>
-          </tr>
-          <tr
-            v-for="(result, index) in results"
-            :key="index"
-          >
-            <td>{{ result.student }}</td>
-            <td>{{ result.group }}</td>
-            <td>{{ result.test }}</td>
-            <td>{{ result.result }}</td>
-            <td>{{ result.time }}</td>
-          </tr>
-        </table>
+        <div class="table-wrapper">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Имя</th>
+                <th>Группа</th>
+                <th>Тест</th>
+                <th>Оценка</th>
+                <th>Время</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(result, index) in results" :key="index">
+                <td>{{ getFullName(result.user) }}</td>
+                <td>{{ result.user.group }}</td>
+                <td>{{ result.title }}</td>
+                <td>{{ result.rate }}</td>
+                <td>{{ moment.utc(result.date).format("HH:mm DD.MM.YY") }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </main>
   </div>
 </template>
 
 <script>
-import NavAside from '../../components/NavAside';
-
+import NavAside from "../../components/NavAside";
+import moment from "moment";
 export default {
-  name: 'Admin',
+  name: "Admin",
   components: {
     NavAside,
   },
   data() {
     return {
-      results: [],
+      moment,
     };
   },
+  computed: {
+    results() {
+      return this.$store.getters.getResults;
+    },
+  },
   mounted() {
-    this.$store.dispatch('loadResults').then((result) => {
-      this.results = result;
-    });
+    this.loadResults();
   },
   methods: {
     removeResults() {
-      this.$store.dispatch('removeResults');
-      this.results = [];
+      this.$store.dispatch("removeResults");
+    },
+    loadResults() {
+      this.$store.dispatch("loadResults");
+    },
+    getFullName(arr) {
+      return `${arr.lastname} ${arr.firstname} ${arr.patronymic}`;
     },
   },
 };
