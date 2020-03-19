@@ -176,10 +176,14 @@ export default {
       // eslint-disable-next-line default-case
       switch (this.mode) {
         case "create":
-          this.$store.dispatch("createTest", this.test);
+          this.$store.dispatch("createTest", this.test).then(() => {
+            this.closeModal();
+          });
           break;
         case "update":
-          this.$store.dispatch("updateTest", this.test);
+          this.$store.dispatch("updateTest", this.test).then(() => {
+            this.closeModal();
+          });
           break;
       }
     },

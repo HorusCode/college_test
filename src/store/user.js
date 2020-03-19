@@ -2,44 +2,36 @@ import Api from "@/helpers/api";
 
 export default {
   state: {
-    user: {
-      isAuth: false,
-      id: null,
-      role: null,
-      group: null,
-      firstname: null,
-      lastname: null,
-      patronymic: null,
-    },
+    user: {},
+    status: "",
+    token: localStorage.getItem("authtoken") || "",
   },
   mutations: {
     SET_USER: (state, payload) => {
       state.user.isAuth = true;
-      state.user.id = payload.user.id;
-      state.user.group = payload.group ? payload.group : "";
-      state.user.firstname = payload.user.firstname;
-      state.user.patronymic = payload.user.patronymic;
-      state.user.lastname = payload.user.lastname;
-      state.user.role = payload.role;
+      state.user = payload.user;
       localStorage.setItem("role", payload.role);
       localStorage.setItem("group", state.user.group);
       localStorage.setItem("authtoken", payload.token);
     },
     REMOVE_USER: state => {
-      state.user = {
-        isAuth: false,
-        id: null,
-        role: null,
-        group: null,
-        firstname: null,
-        lastname: null,
-        patronymic: null,
-      };
+      state.user = {};
+      state.status = "";
       localStorage.removeItem("role");
       localStorage.removeItem("name");
       localStorage.removeItem("authtoken");
     },
-  },
+    AUTH_REQUEST: (state) => {
+      state.status = 'loading'
+    },
+    AUTH_SUCCESS: (state, token, user) => {
+      state.status = 'success';
+      state.token = token;
+      state.user = user;
+    },
+    AUTH_ERROR: (state) => {
+      state.status = 'error'
+    },
   actions: {
     async logIn({ commit }, payload) {
       commit("SET_PROCESSING", true);
@@ -65,9 +57,9 @@ export default {
         commit("REMOVE_USER");
       }
     },
-    async stateUserChanged({ commit }) {
+    stateUserChanged({ commit }) {
       commit("SET_PROCESSING", true);
-      await Api.get("/user/me")
+      Api.get("/user/me")
         .then(response => {
           commit("SET_USER", response.data);
         })
@@ -80,13 +72,8 @@ export default {
     },
   },
   getters: {
-    isUserAuth: state => state.user.isAuth,
+    isUserAuth: state => !!state.token,
+    getAuthStatus: state => state.status,
     isUserUid: state => state.user.id,
-    currentUser: state => {
-      if (state.user.isAuth) {
-        return state.user;
-      }
-      return null;
-    },
   },
 };

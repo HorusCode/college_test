@@ -20,36 +20,14 @@ Vue.config.productionTip = false;
 new Vue({
   router,
   store,
-  created() {
-    if (process.env.NODE_ENV === "production") {
-      this.$router.push("/");
-    }
-    store.dispatch("stateUserChanged").then(() => {
-      const userRole = localStorage.getItem("role");
-      switch (userRole) {
-        case "student":
-          this.$router.push("/user");
-          break;
-        case "teacher":
-          this.$router.push("/admin");
-          break;
-      }
-    });
-  },
   render(h) {
     return h(App);
   },
 }).$mount("#app");
 
-router.beforeEach((to, from, next) => {
+/*router.beforeEach((to, from, next) => {
   const { authorize } = to.meta;
   const userRole = localStorage.getItem("role");
-
-  const publicPages = ["/"];
-  const authRequired = !publicPages.includes(to.path);
-  if (!store.getters.isUserAuth && authRequired) {
-    return next("/");
-  }
 
   if (authorize) {
     if (userRole === null && to.path !== "/") {
@@ -65,4 +43,4 @@ router.beforeEach((to, from, next) => {
     }
   }
   next();
-});
+});*/

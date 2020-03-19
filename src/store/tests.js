@@ -13,7 +13,7 @@ export default {
       Object.assign(state.tests[idx], payload);
     },
     ADD_TESTS: (state, payload) => {
-      state.tests.push(payload);
+      state.tests.unshift(payload);
     },
     DELETE_TEST: (state, payload) => {
       const idx = state.tests.findIndex(obj => obj.id === payload.id);
