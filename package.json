@@ -1,6 +1,8 @@
 {
   "name": "college_test",
-  "version": "0.1.0",
+  "description": "College Test",
+  "author": "HorusDev",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -8,37 +10,47 @@
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint",
-    "electron:build": "vue-cli-service electron:build",
-    "electron:serve": "vue-cli-service electron:serve",
+    "electron:build": "vue-cli-service electron:build NODE_ENV=production --windows --ia32",
+    "electron:serve": "vue-cli-service electron:serve NODE_ENV=development",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps"
   },
   "main": "background.js",
   "dependencies": {
+    "app-root-path": "^3.0.0",
+    "axios": "^0.19.2",
     "chai-as-promised": "^7.1.1",
     "core-js": "^2.6.5",
+    "electron-pdf-browser-window": "^1.0.12",
+    "vee-validate": "^3.2.2",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
+    "@mdi/font": "^4.8.95",
     "@vue/cli-plugin-babel": "^3.12.0",
     "@vue/cli-plugin-e2e-cypress": "^3.12.0",
     "@vue/cli-plugin-eslint": "^3.12.0",
     "@vue/cli-plugin-unit-mocha": "^3.12.0",
     "@vue/cli-service": "^3.12.0",
-    "@vue/eslint-config-prettier": "^5.0.0",
+    "@vue/eslint-config-airbnb": "^5.0.2",
     "@vue/test-utils": "1.0.0-beta.29",
+    "animejs": "^3.1.0",
     "babel-eslint": "^10.0.1",
     "chai": "^4.1.2",
     "electron": "^6.0.0",
     "eslint": "^5.16.0",
-    "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-vue": "^5.0.0",
+    "ncp": "^2.0.0",
+    "nedb-promises": "^4.0.1",
     "node-sass": "^4.12.0",
+    "normalize.css": "^8.0.1",
     "prettier": "^1.18.2",
     "sass-loader": "^8.0.0",
+    "vue-chartjs": "^3.5.0",
     "vue-cli-plugin-electron-builder": "^1.4.4",
-    "vue-template-compiler": "^2.6.10"
+    "vue-template-compiler": "^2.6.10",
+    "vue-wysiwyg": "^1.7.2"
   }
 }

@@ -1,0 +1,84 @@
+@mixin gradientBg($direction, $startColor, $endColor) {
+  background: $startColor;
+  background: linear-gradient($direction,  $startColor 0%, $endColor 80%,$endColor 100%);
+}
+
+.btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+  font-weight: 500;
+  font-size: 16px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  line-height: 24px;
+  color: #ffffff;
+  position: relative;
+  height: 50px;
+  border-radius: 3px;
+  padding: 0 2em;
+  cursor: pointer;
+  box-shadow: 0 3px 5px 0 #0000003b;
+  transition: background-color .2s ease-in-out;
+  &.btn-primary {
+    background-color: $primary;
+    &:hover {
+      background-color: lighten($primary, 10);
+    }
+    &:active {
+      background-color: darken($primary, 10);
+    }
+  }
+  &.btn-secondary {
+    background-color: $secondary;
+    &:hover {
+      background-color: lighten($secondary, 10);
+    }
+    &:active {
+      background-color: darken($secondary, 10);
+    }
+  }
+  &.btn-danger {
+    background-color: $danger;
+    &:hover {
+      background-color: lighten($danger, 10);
+    }
+    &:active {
+      background-color: darken($danger, 10);
+    }
+  }
+
+  &.is-small {
+    height: 30px;
+  }
+  &.rounded {
+    border-radius: 25px;
+  }
+  &.width-1 {
+    width: 7rem;
+    font-size: .7em;
+  }
+  &.width-2 {
+    width: 9rem;
+  }
+  &.width-3 {
+    width: 11rem;
+  }
+  &.size-1 {
+    font-size: 13px;
+    padding: 0 1em;
+    height: 40px;
+  }
+  &:disabled {
+    background-color: $muted;
+    opacity: .3;
+    transition: none;
+    cursor: default;
+    &:hover {
+      background-color: $muted;
+    }
+
+  }
+}
+
