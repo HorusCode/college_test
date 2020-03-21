@@ -36,13 +36,7 @@
             />
           </header>
           <div class="card-content">
-            <VueEditor
-              v-model="questions.name"
-              class="mb-1"
-              use-custom-image-handler
-              @image-added="uploadImage"
-              @image-removed="removeImage"
-            ></VueEditor>
+            <ckeditor :editor="editor" :config="editorConfig" />
             <div class="answers">
               <div v-for="(answer, i) in questions.answers" :key="`answer-${i}`" class="checkbox">
                 <input
@@ -89,18 +83,26 @@
 </template>
 
 <script>
-import { VueEditor } from "vue2-editor";
+import CKEditor from "@ckeditor/ckeditor5-vue";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import "@ckeditor/ckeditor5-build-classic/build/translations/ru";
 import Api from "@/helpers/api";
 import { mask } from "vue-the-mask";
 
 export default {
   name: "ModalCreateTest",
-  components: { VueEditor },
+  components: {
+    ckeditor: CKEditor.component,
+  },
   directives: { mask },
   props: ["anim", "updatingTest"],
   data() {
     return {
       modal: null,
+      editor: ClassicEditor,
+      editorConfig: {
+        language: "ru",
+      },
       mode: "create",
       timemask: {
         mask: "A#:B#:B#",
@@ -111,14 +113,14 @@ export default {
         },
       },
       test: {
-        title: "Название теста",
+        title: "",
         time: "00:15:00",
         questions: [
           {
-            name: "Вопрос",
+            name: "",
             answers: [
               {
-                text: "Answer Text1",
+                text: "",
                 answer: false,
               },
             ],
@@ -151,7 +153,7 @@ export default {
     },
     addQuestion() {
       this.test.questions.push({
-        name: "Question Answer",
+        name: "",
         answers: [
           {
             text: "",
@@ -162,7 +164,7 @@ export default {
     },
     addAnswer(i) {
       this.test.questions[i].answers.push({
-        text: "Answer Text1",
+        text: "",
         answer: false,
       });
     },
@@ -173,7 +175,6 @@ export default {
       this.test.questions.splice(questionInd, 1);
     },
     saveTest() {
-      // eslint-disable-next-line default-case
       switch (this.mode) {
         case "create":
           this.$store.dispatch("createTest", this.test).then(() => {
@@ -187,14 +188,12 @@ export default {
           break;
       }
     },
-    uploadImage: function(file, Editor, cursorLocation, resetUploader) {
+    uploadImage: function(file) {
       let formData = new FormData();
       formData.append("files[]", file);
       Api.post("/upload/image", formData)
         .then(result => {
           let url = result.data.data[0];
-          Editor.insertEmbed(cursorLocation, "image", url);
-          resetUploader();
         })
         .catch(err => {
           console.log(err);
@@ -211,5 +210,8 @@ export default {
 <style scoped>
 .checkbox .input-effect {
   margin: 0;
+}
+.mdi-plus {
+  cursor: pointer;
 }
 </style>

@@ -1,7 +1,7 @@
 export default {
   state: {
     processing: false,
-    error: null,
+    error: {},
   },
   mutations: {
     SET_PROCESSING: (state, payload) => {

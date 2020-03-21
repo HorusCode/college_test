@@ -30,19 +30,6 @@ export default {
           commit("SET_PROCESSING", false);
         });
     },
-    createResult({ commit }, payload) {
-      commit("SET_PROCESSING", true);
-      db.result.insert(payload).then(result => {
-        commit("ADD_RESULTS", result);
-        commit("SET_PROCESSING", false);
-      });
-    },
-    removeResults({ commit }) {
-      commit("SET_PROCESSING", true);
-      db.result.remove({}, { multi: true });
-      commit("REMOVE_RESULTS");
-      commit("SET_PROCESSING", false);
-    },
   },
   getters: {
     getResults: state => state.results,

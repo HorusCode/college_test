@@ -45,7 +45,7 @@
         </div>
         <div class="d-flex align-items-center justify-content-center mx-1">
           <button type="submit" class="btn btn-primary width-1">
-            <div v-if="processing" class="spinner spinner-3 s-24"></div>
+            <div v-if="status" class="spinner spinner-3 s-24"></div>
             <span v-else>Вход</span>
           </button>
         </div>
@@ -55,6 +55,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "LoginFormCard",
   data() {
@@ -62,33 +64,28 @@ export default {
       showPassword: false,
       email: "",
       password: "",
-      errors: {},
     };
   },
   computed: {
-    processing() {
-      return this.$store.getters.getProcessing;
-    },
+    ...mapState({
+      status: state => state.userModule.status === "loading",
+      role: state => state.userModule.role,
+      errors: state => state.generalModule.error,
+    }),
   },
   methods: {
     auth() {
       const { email, password } = this;
-      this.$store
-        .dispatch("logIn", { email, password })
-        .then(() => {
-
-          switch (this.$store.getters.currentUser.role) {
-            case "student":
-              this.$router.push("/user");
-              break;
-            case "teacher":
-              this.$router.push("/admin");
-              break;
-          }
-        })
-        .catch(() => {
-           this.errors = this.$store.getters.getError ? this.$store.getters.getError : {};
-        });
+      this.$store.dispatch("logIn", { email, password }).then(() => {
+        switch (this.role) {
+          case "student":
+            this.$router.push("/user");
+            break;
+          case "teacher":
+            this.$router.push("/admin");
+            break;
+        }
+      });
     },
   },
 };

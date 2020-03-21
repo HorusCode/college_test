@@ -5,59 +5,64 @@ export default {
     user: {},
     status: "",
     token: localStorage.getItem("authtoken") || "",
+    role: "",
   },
   mutations: {
     SET_USER: (state, payload) => {
-      state.user.isAuth = true;
       state.user = payload.user;
-      localStorage.setItem("role", payload.role);
-      localStorage.setItem("group", state.user.group);
-      localStorage.setItem("authtoken", payload.token);
+      state.role = payload.role;
+      if (payload.token) {
+        state.token = payload.token;
+        localStorage.setItem("authtoken", payload.token);
+      }
     },
     REMOVE_USER: state => {
       state.user = {};
       state.status = "";
-      localStorage.removeItem("role");
-      localStorage.removeItem("name");
+      state.role = "";
+      state.token = "";
       localStorage.removeItem("authtoken");
     },
-    AUTH_REQUEST: (state) => {
-      state.status = 'loading'
+    AUTH_STATUS: (state, status = "") => {
+      state.status = status;
     },
-    AUTH_SUCCESS: (state, token, user) => {
-      state.status = 'success';
-      state.token = token;
-      state.user = user;
-    },
-    AUTH_ERROR: (state) => {
-      state.status = 'error'
-    },
+  },
   actions: {
-    async logIn({ commit }, payload) {
-      commit("SET_PROCESSING", true);
-      commit("REMOVE_ERROR", true);
-      await Api.post("/login", {
-        email: payload.email,
-        password: payload.password,
-      })
-        .then(response => {
-          commit("SET_USER", response.data);
+    logIn({ commit }, payload) {
+      return new Promise((resolve, reject) => {
+        commit("AUTH_STATUS", "loading");
+        Api.post("/login", {
+          email: payload.email,
+          password: payload.password,
         })
-        .catch(error => {
-          commit("SET_ERROR", error.response.data.errors);
-        })
-        .finally(() => {
-          commit("SET_PROCESSING", false);
-        });
+          .then(response => {
+            commit("SET_USER", response.data);
+            commit("AUTH_STATUS", "success");
+            resolve(response);
+          })
+          .catch(error => {
+            commit("generalModule/SET_ERROR", error.response.data.errors);
+            commit("AUTH_STATUS", "error");
+            reject(error);
+          });
+      });
     },
-    stateChanged: ({ commit }, payload) => {
-      if (payload) {
-        commit("SET_USER", payload);
-      } else {
-        commit("REMOVE_USER");
-      }
+    logOut({ commit }) {
+      return new Promise((resolve, reject) => {
+        commit("AUTH_STATUS", "loading");
+        Api.get("/logout")
+          .then(response => {
+            commit("REMOVE_USER", response.data);
+            commit("AUTH_STATUS", "success");
+            resolve(response);
+          })
+          .catch(error => {
+            commit("AUTH_STATUS", "error");
+            reject(error);
+          });
+      });
     },
-    stateUserChanged({ commit }) {
+    getMe({ commit }) {
       commit("SET_PROCESSING", true);
       Api.get("/user/me")
         .then(response => {
@@ -73,7 +78,6 @@ export default {
   },
   getters: {
     isUserAuth: state => !!state.token,
-    getAuthStatus: state => state.status,
-    isUserUid: state => state.user.id,
+    userRole: state => state.role,
   },
 };

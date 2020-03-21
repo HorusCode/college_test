@@ -58,6 +58,7 @@
 
 <script>
 import { Role } from "@/helpers/role";
+import { mapState } from "vuex";
 
 export default {
   name: "NavAside",
@@ -127,15 +128,32 @@ export default {
       activeLinks: [],
     };
   },
-  mounted() {
-    const role = localStorage.getItem("role");
-    const type = Object.keys(Role).find(key => Role[key] === role);
-    this.activeLinks = this.routerLinks[type.toLowerCase()];
+  computed: {
+    ...mapState({
+      role: state => state.userModule.role,
+    }),
+  },
+  watch: {
+    role(newValue) {
+      if (newValue) {
+        this.setLinks();
+      }
+    },
+  },
+  created() {
+    this.setLinks();
   },
   methods: {
     exit() {
-      this.$store.dispatch("stateChanged");
-      this.$router.push("/");
+      this.$store.dispatch("logOut").then(() => {
+        this.$router.push("/");
+      });
+    },
+    setLinks() {
+      const role = this.role;
+      if (role === "") return false;
+      const type = Object.keys(Role).find(key => Role[key] === role);
+      this.activeLinks = this.routerLinks[type.toLowerCase()];
     },
   },
 };

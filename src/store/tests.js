@@ -64,12 +64,6 @@ export default {
           commit("SET_PROCESSING", false);
         });
     },
-    removeTests({ commit }) {
-      commit("SET_PROCESSING", true);
-      db.test.remove({}, { multi: true });
-      commit("REMOVE_TESTS");
-      commit("SET_PROCESSING", false);
-    },
   },
   getters: {
     getTests: state => state.tests,
