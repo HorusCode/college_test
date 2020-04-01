@@ -45,24 +45,14 @@ export default {
         });
     },
     updateTest({ commit }, payload) {
-      commit("SET_PROCESSING", true);
-      Api.put(`/tests/${payload.id}`, payload)
-        .then(response => {
-          commit("UPDATE_TESTS", response.data.data);
-        })
-        .finally(() => {
-          commit("SET_PROCESSING", false);
-        });
+      Api.put(`/tests/${payload.id}`, payload).then(response => {
+        commit("UPDATE_TESTS", response.data.data);
+      });
     },
     deleteTest({ commit }, payload) {
-      commit("SET_PROCESSING", true);
-      Api.delete(`/tests/${payload.id}`)
-        .then(response => {
-          commit("DELETE_TEST", response.data.id);
-        })
-        .finally(() => {
-          commit("SET_PROCESSING", false);
-        });
+      Api.delete(`/tests/${payload.id}`).then(response => {
+        commit("DELETE_TEST", response.data.id);
+      });
     },
   },
   getters: {

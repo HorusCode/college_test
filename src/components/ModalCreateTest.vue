@@ -24,7 +24,7 @@
           </div>
         </div>
         <div
-          v-for="(questions, index) in test.questions"
+          v-for="(question, index) in test.questions"
           :key="`question-${index}`"
           class="card vertical mb-1"
         >
@@ -36,9 +36,13 @@
             />
           </header>
           <div class="card-content">
-            <ckeditor :editor="editor" :config="editorConfig" />
+            <editor
+              v-model="question.name"
+              api-key="mohavi6jwno1pmy1mk56zqri2l8vqihfl82mt4u4v1yhytee"
+              :init="editorConfig"
+            />
             <div class="answers">
-              <div v-for="(answer, i) in questions.answers" :key="`answer-${i}`" class="checkbox">
+              <div v-for="(answer, i) in question.answers" :key="`answer-${i}`" class="checkbox">
                 <input
                   :id="`checkbox-${index}-${i}`"
                   v-model="answer.answer"
@@ -83,27 +87,69 @@
 </template>
 
 <script>
-import CKEditor from "@ckeditor/ckeditor5-vue";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import "@ckeditor/ckeditor5-build-classic/build/translations/ru";
 import Api from "@/helpers/api";
 import { mask } from "vue-the-mask";
+import Editor from "@tinymce/tinymce-vue";
 
 export default {
   name: "ModalCreateTest",
-  components: {
-    ckeditor: CKEditor.component,
-  },
   directives: { mask },
+  components: {
+    editor: Editor,
+  },
   props: ["anim", "updatingTest"],
   data() {
     return {
       modal: null,
-      editor: ClassicEditor,
-      editorConfig: {
-        language: "ru",
-      },
       mode: "create",
+      editorConfig: {
+        height: 500,
+        language: "ru",
+        plugins: "codesample image link lists media print table",
+        menubar: false,
+        toolbar:
+          "undo redo | bold italic underline strikethrough | " +
+          "fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | " +
+          "outdent indent | numlist bullist | forecolor backcolor removeformat | codesample image link media print ",
+        table_toolbar:
+          "tableprops tabledelete | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol",
+        toolbar_mode: "sliding",
+        images_upload_handler: function(blobInfo, success, failure) {
+          let formData = new FormData();
+          formData.append("files[]", blobInfo.blob());
+          formData.append("path", "uploaded");
+          formData.append("disk", "public");
+          formData.append("overwrite", 0);
+          Api.post("http://192.168.1.200/file-manager/upload", formData)
+            .then(response => {
+              success(response.data.result.url);
+            })
+            .catch(error => {
+              failure(error.data)
+            });
+        },
+        file_picker_callback(callback) {
+          let x =
+            window.innerWidth ||
+            document.documentElement.clientWidth ||
+            document.getElementsByTagName("body")[0].clientWidth;
+          let y =
+            window.innerHeight ||
+            document.documentElement.clientHeight ||
+            document.getElementsByTagName("body")[0].clientHeight;
+          window.tinymce.activeEditor.windowManager.openUrl({
+            url: "http://192.168.1.200/file-manager/tinymce5",
+            title: "Laravel File manager",
+            width: x * 0.8,
+            height: y * 0.9,
+          });
+          window.addEventListener("message", function(e) {
+            if (e.data.mceAction === "insertContent") {
+              callback(e.data.content, { text: e.data.text });
+            }
+          });
+        },
+      },
       timemask: {
         mask: "A#:B#:B#",
         tokens: {
@@ -187,21 +233,6 @@ export default {
           });
           break;
       }
-    },
-    uploadImage: function(file) {
-      let formData = new FormData();
-      formData.append("files[]", file);
-      Api.post("/upload/image", formData)
-        .then(result => {
-          let url = result.data.data[0];
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    },
-    removeImage: function(file) {
-      let name = file.split("/").pop();
-      Api.delete("/delete/testing/" + name);
     },
   },
 };
