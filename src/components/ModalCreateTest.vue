@@ -2,7 +2,9 @@
   <div class="modal full-page">
     <div class="modal__card">
       <div class="modal__header">
-        <h2 class="text-title">Создание теста</h2>
+        <h2 class="text-title">
+          Создание теста
+        </h2>
         <i class="mdi mdi-plus pos-right mdi-rotate-45 mdi-36px close" @click="closeModal" />
       </div>
       <div class="modal__content wrapper">
@@ -23,45 +25,60 @@
             </div>
           </div>
         </div>
+
         <div
           v-for="(question, index) in test.questions"
           :key="`question-${index}`"
-          class="card vertical mb-1"
-        >
+          class="card vertical mb-1">
           <header class="card-header">
             <h3 class="text-title">Вопрос №{{ index + 1 }}</h3>
             <i
               class="mdi mdi-plus pos-right mdi-rotate-45 mdi-36px"
-              @click="deleteQuestion(index)"
-            />
+              @click="deleteQuestion(index)"/>
           </header>
           <div class="card-content">
             <editor
               v-model="question.name"
               api-key="mohavi6jwno1pmy1mk56zqri2l8vqihfl82mt4u4v1yhytee"
-              :init="editorConfig"
-            />
+              :init="editorConfig"/>
             <div class="answers">
-              <div v-for="(answer, i) in question.answers" :key="`answer-${i}`" class="checkbox">
+              <div
+                v-for="(answer, i) in question.answers"
+                :key="`answer-${i}`"
+                class="d-flex align-items-center">
                 <input
+                  v-if="typeClass(question.type) === 'radio'"
+                  :id="`radio-${index}-${i}`"
+                  v-model="answer.answer"
+                  value="true"
+                  class="radio-custom"
+                  type="radio"
+                  :name="`radio-${index}`"
+                  @click="changeRadioButton(index), (answer.answer = !$event.target.checked)"
+                />
+                <input
+                  v-else-if="typeClass(question.type) === 'checkbox'"
                   :id="`checkbox-${index}-${i}`"
                   v-model="answer.answer"
                   class="checkbox-custom"
                   type="checkbox"
+                  :name="`checkbox-${index}`"
                 />
-                <label :for="`checkbox-${index}-${i}`" class="checkbox-custom-label">верный</label>
+                <label
+                  :for="`${typeClass(question.type)}-${index}-${i}`"
+                  :class="typeClass(question.type) + '-custom-label'">
+                  верный
+                </label>
                 <div class="input-line">
                   <div class="input-group">
                     <input
                       v-model="answer.text"
                       class="input default transparent square"
                       type="text"
-                      required
-                    />
+                      required/>
                     <i
                       class="mdi pos-right mdi-plus mdi-rotate-45 c-pointer"
-                      @click="deleteAnswer(index, i)"
-                    />
+                      @click="deleteAnswer(index, i)"/>
                   </div>
                 </div>
               </div>
@@ -70,7 +87,29 @@
               Добавить ответ
             </button>
           </div>
+          <div class="card vertical child-left">
+            <header class="card-header">
+              <h3>Тип вопроса</h3>
+            </header>
+            <div class="card-content">
+              <div v-for="(type, key) in types" :key="key" class="mb-1">
+                <input
+                  :id="`${key}-${index}`"
+                  v-model="question.type"
+                  type="radio"
+                  class="radio-custom"
+                  :name="'keys-' + index"
+                  :value="key"
+                  @click="changeRadioButton(index)"
+                />
+                <label :for="`${key}-${index}`" class="radio-custom-label">
+                  {{ type.title }}
+                </label>
+              </div>
+            </div>
+          </div>
         </div>
+
         <div class="card vertical mb-1">
           <header class="card-header d-flex justify-content-around">
             <button class="btn btn-secondary rounded" @click="addQuestion">
@@ -87,86 +126,76 @@
 </template>
 
 <script>
-import Api from "@/helpers/api";
-import { mask } from "vue-the-mask";
-import Editor from "@tinymce/tinymce-vue";
+import { mask } from 'vue-the-mask';
+import Editor from '@tinymce/tinymce-vue';
+import editorConfig from '@/helpers/tinyMCE';
 
 export default {
-  name: "ModalCreateTest",
+  name: 'ModalCreateTest',
   directives: { mask },
   components: {
     editor: Editor,
   },
-  props: ["anim", "updatingTest"],
+  props: ['anim', 'updatingTest'],
   data() {
     return {
       modal: null,
-      mode: "create",
-      editorConfig: {
-        height: 500,
-        language: "ru",
-        plugins: "codesample image link lists media print table",
-        menubar: false,
-        toolbar:
-          "undo redo | bold italic underline strikethrough | " +
-          "fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | " +
-          "outdent indent | numlist bullist | forecolor backcolor removeformat | codesample image link media print ",
-        table_toolbar:
-          "tableprops tabledelete | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol",
-        toolbar_mode: "sliding",
-        images_upload_handler: function(blobInfo, success, failure) {
-          let formData = new FormData();
-          formData.append("files[]", blobInfo.blob());
-          formData.append("path", "uploaded");
-          formData.append("disk", "public");
-          formData.append("overwrite", 0);
-          Api.post("http://192.168.1.200/file-manager/upload", formData)
-            .then(response => {
-              success(response.data.result.url);
-            })
-            .catch(error => {
-              failure(error.data)
-            });
-        },
-        file_picker_callback(callback) {
-          let x =
-            window.innerWidth ||
-            document.documentElement.clientWidth ||
-            document.getElementsByTagName("body")[0].clientWidth;
-          let y =
-            window.innerHeight ||
-            document.documentElement.clientHeight ||
-            document.getElementsByTagName("body")[0].clientHeight;
-          window.tinymce.activeEditor.windowManager.openUrl({
-            url: "http://192.168.1.200/file-manager/tinymce5",
-            title: "Laravel File manager",
-            width: x * 0.8,
-            height: y * 0.9,
-          });
-          window.addEventListener("message", function(e) {
-            if (e.data.mceAction === "insertContent") {
-              callback(e.data.content, { text: e.data.text });
-            }
-          });
-        },
-      },
+      editorConfig,
+      mode: 'create',
       timemask: {
-        mask: "A#:B#:B#",
+        mask: 'A#:B#:B#',
         tokens: {
           A: { pattern: /[0-2]/ },
           B: { pattern: /[0-6]/ },
-          "#": { pattern: /[0-9]/ },
+          '#': { pattern: /[0-9]/ },
+        },
+      },
+      types: {
+        multichoice: {
+          class: 'checkbox',
+          title: 'Множественный выбор',
+        },
+        singlechoice: {
+          class: 'radio',
+          title: 'Одиночный выбор',
+        },
+        missingword: {
+          class: 'checkbox',
+          title: 'Пропущенное слово',
         },
       },
       test: {
-        title: "",
-        time: "00:15:00",
+        title: '',
+        time: '00:15:00',
         questions: [
           {
-            name: "",
+            name: '',
+            type: 'multichoice', // multichoice, singlechoice, missingword
             answers: [
               {
-                text: "",
+                text: '',
+                answer: false,
+              },
+            ],
+          },
+          {
+            name: '',
+            type: 'singlechoice', // multichoice, singlechoice, missingword
+            answers: [
+              {
+                text: '',
+                answer: false,
+              },
+              {
+                text: '',
+                answer: true,
+              },
+              {
+                text: '',
+                answer: false,
+              },
+              {
+                text: '',
                 answer: false,
               },
             ],
@@ -178,31 +207,39 @@ export default {
   mounted() {
     if (Object.keys(this.updatingTest).length !== 0) {
       this.test = JSON.parse(JSON.stringify(this.updatingTest));
-      this.mode = "update";
+      this.mode = 'update';
     } else {
-      this.mode = "create";
+      this.mode = 'create';
     }
-    this.modal = document.querySelector(".modal");
-    this.modal.classList.remove("out");
+    this.modal = document.querySelector('.modal');
+    this.modal.classList.remove('out');
     this.modal.classList.add(`${this.anim}`);
   },
   methods: {
     closeModal() {
-      this.modal.classList.add("out");
+      this.modal.classList.add('out');
       this.modal.addEventListener(
-        "animationend",
+        'animationend',
         () => {
-          this.$emit("close");
+          this.$emit('close');
         },
-        false,
+        false
       );
+    },
+    changeRadioButton(q) {
+      this.test.questions[q].answers.forEach(value => {
+        value.answer = false;
+      });
+    },
+    typeClass(type) {
+      return this.types[type].class;
     },
     addQuestion() {
       this.test.questions.push({
-        name: "",
+        name: '',
         answers: [
           {
-            text: "",
+            text: '',
             answer: false,
           },
         ],
@@ -210,7 +247,7 @@ export default {
     },
     addAnswer(i) {
       this.test.questions[i].answers.push({
-        text: "",
+        text: '',
         answer: false,
       });
     },
@@ -222,13 +259,13 @@ export default {
     },
     saveTest() {
       switch (this.mode) {
-        case "create":
-          this.$store.dispatch("createTest", this.test).then(() => {
+        case 'create':
+          this.$store.dispatch('createTest', this.test).then(() => {
             this.closeModal();
           });
           break;
-        case "update":
-          this.$store.dispatch("updateTest", this.test).then(() => {
+        case 'update':
+          this.$store.dispatch('updateTest', this.test).then(() => {
             this.closeModal();
           });
           break;
@@ -238,11 +275,16 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss">
 .checkbox .input-effect {
   margin: 0;
 }
+
 .mdi-plus {
   cursor: pointer;
+}
+
+.tox-tinymce {
+  margin-bottom: 1rem;
 }
 </style>

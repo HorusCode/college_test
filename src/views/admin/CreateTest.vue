@@ -40,7 +40,7 @@
                     moment
                       .utc(test.created_at)
                       .local()
-                      .format("HH:mm DD.MM.YY")
+                      .format('HH:mm DD.MM.YY')
                   }}
                 </td>
                 <td>
@@ -48,7 +48,7 @@
                     moment
                       .utc(test.updated_at)
                       .local()
-                      .format("HH:mm DD.MM.YY")
+                      .format('HH:mm DD.MM.YY')
                   }}
                 </td>
                 <td>
@@ -78,11 +78,11 @@
 </template>
 
 <script>
-import NavAside from "../../components/NavAside";
-import ModalCreateTest from "../../components/ModalCreateTest";
-import moment from "moment";
+import NavAside from '../../components/NavAside';
+import ModalCreateTest from '../../components/ModalCreateTest';
+import moment from 'moment';
 export default {
-  name: "CreateTest",
+  name: 'CreateTest',
   components: {
     ModalCreateTest,
     NavAside,
@@ -108,13 +108,13 @@ export default {
       this.showModal = true;
     },
     removeTests() {
-      this.$store.dispatch("removeTests");
+      this.$store.dispatch('removeTests');
     },
     deleteTest(id) {
-      this.$store.dispatch("deleteTest", { id: id });
+      this.$store.dispatch('deleteTest', { id: id });
     },
     loadTests() {
-      this.$store.dispatch("loadTests");
+      this.$store.dispatch('loadTests');
     },
   },
 };

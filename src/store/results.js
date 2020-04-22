@@ -1,4 +1,4 @@
-import Api from "@/helpers/api";
+import Api from '@/helpers/api';
 
 export default {
   state: {
@@ -21,13 +21,13 @@ export default {
   },
   actions: {
     loadResults({ commit }) {
-      commit("SET_PROCESSING", true);
-      Api.get("/ratings")
+      commit('SET_PROCESSING', true);
+      Api.get('/ratings')
         .then(response => {
-          commit("SET_RESULTS", response.data.data);
+          commit('SET_RESULTS', response.data.data);
         })
         .finally(() => {
-          commit("SET_PROCESSING", false);
+          commit('SET_PROCESSING', false);
         });
     },
   },

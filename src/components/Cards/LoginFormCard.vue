@@ -55,20 +55,20 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from 'vuex';
 
 export default {
-  name: "LoginFormCard",
+  name: 'LoginFormCard',
   data() {
     return {
       showPassword: false,
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     };
   },
   computed: {
     ...mapState({
-      status: state => state.userModule.status === "loading",
+      status: state => state.userModule.status === 'loading',
       role: state => state.userModule.role,
       errors: state => state.generalModule.error,
     }),
@@ -76,13 +76,13 @@ export default {
   methods: {
     auth() {
       const { email, password } = this;
-      this.$store.dispatch("logIn", { email, password }).then(() => {
+      this.$store.dispatch('logIn', { email, password }).then(() => {
         switch (this.role) {
-          case "student":
-            this.$router.push("/user");
+          case 'student':
+            this.$router.push('/user');
             break;
-          case "teacher":
-            this.$router.push("/admin");
+          case 'teacher':
+            this.$router.push('/admin');
             break;
         }
       });

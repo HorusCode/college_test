@@ -32,10 +32,10 @@
 </template>
 
 <script>
-import NavAside from "@/components/NavAside";
+import NavAside from '@/components/NavAside';
 
 export default {
-  name: "Result",
+  name: 'Result',
   components: {
     NavAside,
   },
@@ -45,7 +45,7 @@ export default {
     };
   },
   mounted() {
-    this.$store.dispatch("loadResults", { student: localStorage.getItem("name") }).then(result => {
+    this.$store.dispatch('loadResults', { student: localStorage.getItem('name') }).then(result => {
       this.results = result;
     });
   },

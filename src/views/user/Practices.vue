@@ -28,22 +28,22 @@
 </template>
 
 <script>
-import NavAside from "../../components/NavAside";
+import NavAside from '../../components/NavAside';
 
-const fs = require("fs");
-const { shell } = require("electron");
-const path = require("path");
+const fs = require('fs');
+const { shell } = require('electron');
+const path = require('path');
 
 export default {
-  name: "Practices",
+  name: 'Practices',
   components: {
     NavAside,
   },
   data() {
     return {
       files: [],
-      selectedFile: "",
-      file: "",
+      selectedFile: '',
+      file: '',
       activeBtn: true,
     };
   },
@@ -58,7 +58,7 @@ export default {
     });
   },
   created() {
-    this.fileDir = path.join(this.$path, "/word");
+    this.fileDir = path.join(this.$path, '/word');
   },
   methods: {
     openFile(dir) {

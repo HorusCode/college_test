@@ -23,28 +23,7 @@
           >
             <span class="mdi pos-left-null" :class="link.class" />
             {{ link.title }}
-            <!--<span class="mdi mdi-chevron-up pos-right-null" />-->
           </router-link>
-          <!--<ul class="submenu">
-                      <li class="submenu__item">
-                        <a
-                          class=""
-                          href=""
-                        >Новые</a>
-                      </li>
-                      <li class="submenu__item">
-                        <a
-                          class=""
-                          href=""
-                        >Активные</a>
-                      </li>
-                      <li class="submenu__item">
-                        <a
-                          class=""
-                          href=""
-                        >Завершённые</a>
-                      </li>
-                    </ul>-->
         </li>
       </ul>
     </div>
@@ -57,71 +36,71 @@
 </template>
 
 <script>
-import { Role } from "@/helpers/role";
-import { mapState } from "vuex";
+import { Role } from '@/helpers/role';
+import { mapState } from 'vuex';
 
 export default {
-  name: "NavAside",
+  name: 'NavAside',
   data() {
     return {
       routerLinks: {
         admin: [
           {
-            path: "/admin",
-            title: "Результаты",
-            class: "mdi-chart-bar",
+            path: '/admin',
+            title: 'Результаты',
+            class: 'mdi-chart-bar',
           },
           {
-            path: "/admin/test",
-            title: "Тесты",
-            class: "mdi-test-tube-empty",
+            path: '/admin/test',
+            title: 'Тесты',
+            class: 'mdi-test-tube-empty',
           },
           {
-            path: "/admin/groups",
-            title: "Группы",
-            class: "mdi-account-group-outline",
+            path: '/admin/groups',
+            title: 'Группы',
+            class: 'mdi-account-group-outline',
           },
           {
-            path: "/admin/practices",
-            title: "Практические",
-            class: "mdi-file-document-box-outline",
+            path: '/admin/practices',
+            title: 'Практические',
+            class: 'mdi-file-document-box-outline',
           },
           {
-            path: "/admin/lectures",
-            title: "Лекции",
-            class: "mdi-file-cabinet",
+            path: '/admin/lectures',
+            title: 'Лекции',
+            class: 'mdi-file-cabinet',
           },
           {
-            path: "/admin/presentation",
-            title: "Презентации",
-            class: "mdi-file-powerpoint-outline",
+            path: '/admin/presentation',
+            title: 'Презентации',
+            class: 'mdi-file-powerpoint-outline',
           },
         ],
         user: [
           {
-            path: "/user",
-            title: "Тестирование",
-            class: "mdi-test-tube",
+            path: '/user',
+            title: 'Тестирование',
+            class: 'mdi-test-tube',
           },
           {
-            path: "/user/results",
-            title: "Мои результаты",
-            class: "mdi-chart-bar",
+            path: '/user/results',
+            title: 'Мои результаты',
+            class: 'mdi-chart-bar',
           },
           {
-            path: "/user/practices",
-            title: "Практические",
-            class: "mdi-file-document-box-outline",
+            path: '/user/practices',
+            title: 'Практические',
+            class: 'mdi-file-document-box-outline',
           },
           {
-            path: "/user/lectures",
-            title: "Лекции",
-            class: "mdi-file-cabinet",
+            path: '/user/lectures',
+            title: 'Лекции',
+            class: 'mdi-file-cabinet',
           },
           {
-            path: "/user/presentation",
-            title: "Презентации",
-            class: "mdi-file-powerpoint-outline",
+            path: '/user/presentation',
+            title: 'Презентации',
+            class: 'mdi-file-powerpoint-outline',
           },
         ],
       },
@@ -145,13 +124,13 @@ export default {
   },
   methods: {
     exit() {
-      this.$store.dispatch("logOut").then(() => {
-        this.$router.push("/");
+      this.$store.dispatch('logOut').then(() => {
+        this.$router.push('/');
       });
     },
     setLinks() {
       const role = this.role;
-      if (role === "") return false;
+      if (role === '') return false;
       const type = Object.keys(Role).find(key => Role[key] === role);
       this.activeLinks = this.routerLinks[type.toLowerCase()];
     },

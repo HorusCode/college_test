@@ -1,4 +1,4 @@
-import Api from "@/helpers/api";
+import Api from '@/helpers/api';
 
 export default {
   state: {
@@ -11,13 +11,13 @@ export default {
   },
   actions: {
     loadGroupedStudents({ commit }) {
-      commit("SET_PROCESSING", true);
-      Api.get("/groups/student")
+      commit('SET_PROCESSING', true);
+      Api.get('/groups/student')
         .then(response => {
-          commit("SET_STUDENT", response.data.data);
+          commit('SET_STUDENT', response.data.data);
         })
         .finally(() => {
-          commit("SET_PROCESSING", false);
+          commit('SET_PROCESSING', false);
         });
     },
   },

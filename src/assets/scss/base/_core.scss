@@ -213,3 +213,10 @@ a {
 .question-text {
   margin-bottom: $margin-gap;
 }
+
+
+.card.child-left {
+  position: absolute;
+  left: calc(-300px - #{$grid-gap});
+  width: 300px;
+}

@@ -1,4 +1,4 @@
-import Api from "@/helpers/api";
+import Api from '@/helpers/api';
 
 export default {
   state: {
@@ -25,33 +25,33 @@ export default {
   },
   actions: {
     loadTests({ commit }) {
-      commit("SET_PROCESSING", true);
-      Api.get("/tests")
+      commit('SET_PROCESSING', true);
+      Api.get('/tests')
         .then(response => {
-          commit("SET_TESTS", response.data);
+          commit('SET_TESTS', response.data);
         })
         .finally(() => {
-          commit("SET_PROCESSING", false);
+          commit('SET_PROCESSING', false);
         });
     },
     createTest({ commit }, payload) {
-      commit("SET_PROCESSING", true);
-      Api.post("/tests", payload)
+      commit('SET_PROCESSING', true);
+      Api.post('/tests', payload)
         .then(response => {
-          commit("ADD_TESTS", response.data.data);
+          commit('ADD_TESTS', response.data.data);
         })
         .finally(() => {
-          commit("SET_PROCESSING", false);
+          commit('SET_PROCESSING', false);
         });
     },
     updateTest({ commit }, payload) {
       Api.put(`/tests/${payload.id}`, payload).then(response => {
-        commit("UPDATE_TESTS", response.data.data);
+        commit('UPDATE_TESTS', response.data.data);
       });
     },
     deleteTest({ commit }, payload) {
       Api.delete(`/tests/${payload.id}`).then(response => {
-        commit("DELETE_TEST", response.data.id);
+        commit('DELETE_TEST', response.data.id);
       });
     },
   },

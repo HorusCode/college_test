@@ -24,13 +24,13 @@
 </template>
 
 <script>
-import anime from "animejs";
-import LoginFormCard from "../components/Cards/LoginFormCard";
-import EmailFormCard from "../components/Cards/EmailFormCard";
-import CodeFormCard from "../components/Cards/CodeFormCard";
+import anime from 'animejs';
+import LoginFormCard from '../components/Cards/LoginFormCard';
+import EmailFormCard from '../components/Cards/EmailFormCard';
+import CodeFormCard from '../components/Cards/CodeFormCard';
 
 export default {
-  name: "Login",
+  name: 'Login',
   components: {
     CodeFormCard,
     EmailFormCard,
@@ -38,7 +38,7 @@ export default {
   },
   data() {
     return {
-      activeForm: ".loginForm",
+      activeForm: '.loginForm',
       openRegisterBtn: true,
     };
   },
@@ -49,24 +49,24 @@ export default {
   },
   methods: {
     showForm(closeForm, openForm) {
-      this.openRegisterBtn = openForm !== ".registerForm";
+      this.openRegisterBtn = openForm !== '.registerForm';
       this.activeForm = openForm;
       const forms = anime.timeline({
         duration: 750,
-        easing: "easeInOutBack",
+        easing: 'easeInOutBack',
       });
       forms
         .add({
           targets: closeForm,
-          translateX: "150%",
+          translateX: '150%',
           complete: () => {
-            document.querySelector(openForm).style.display = "flex";
-            document.querySelector(closeForm).style.display = "none";
+            document.querySelector(openForm).style.display = 'flex';
+            document.querySelector(closeForm).style.display = 'none';
           },
         })
         .add({
           targets: openForm,
-          translateX: ["150%", "0%"],
+          translateX: ['150%', '0%'],
         });
     },
   },

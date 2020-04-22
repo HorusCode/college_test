@@ -31,10 +31,10 @@
 
 <script>
 export default {
-  name: "CodeFormCard",
+  name: 'CodeFormCard',
   data() {
     return {
-      code: "",
+      code: '',
     };
   },
 };

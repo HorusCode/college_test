@@ -2,7 +2,7 @@
   <div id="app">
     <div v-if="processing" id="preloader">
       <span class="loader">
-        <span class="loader-inner"></span>
+        <span class="loader-inner" />
       </span>
     </div>
     <router-view />
@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  name: "App",
+  name: 'App',
   computed: {
     processing() {
       return this.$store.getters.getProcessing;

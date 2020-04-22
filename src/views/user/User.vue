@@ -47,18 +47,18 @@
 </template>
 
 <script>
-import NavAside from "../../components/NavAside";
-import ModalTesting from "../../components/ModalTesting";
+import NavAside from '../../components/NavAside';
+import ModalTesting from '../../components/ModalTesting';
 
 export default {
-  name: "User",
+  name: 'User',
   components: {
     ModalTesting,
     NavAside,
   },
   data() {
     return {
-      selectedTestTitle: "Выберите тест",
+      selectedTestTitle: 'Выберите тест',
       selectedTest: {},
       tests: [],
       showModal: false,
@@ -66,7 +66,7 @@ export default {
     };
   },
   created() {
-    this.$store.dispatch("loadTests").then(result => {
+    this.$store.dispatch('loadTests').then(result => {
       this.tests = result;
     });
   },
@@ -75,7 +75,7 @@ export default {
       this.selectedTestTitle = test.title;
       this.selectedTest = test;
       this.activeBtn = false;
-      document.querySelector(".options-view-button").checked = false;
+      document.querySelector('.options-view-button').checked = false;
     },
   },
 };

@@ -1,7 +1,8 @@
 .card {
   display: flex;
-  overflow: hidden;
+  /*overflow: hidden;*/
   @include box();
+  position: relative;
   &.vertical {
     flex-direction: column;
   }

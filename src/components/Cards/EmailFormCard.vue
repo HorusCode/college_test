@@ -31,10 +31,10 @@
 
 <script>
 export default {
-  name: "EmailFormCard",
+  name: 'EmailFormCard',
   data() {
     return {
-      email: "",
+      email: '',
     };
   },
 };

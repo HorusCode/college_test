@@ -62,10 +62,10 @@
 </template>
 
 <script>
-import NavAside from "../../components/NavAside";
+import NavAside from '../../components/NavAside';
 
 export default {
-  name: "Groups",
+  name: 'Groups',
   components: {
     NavAside,
   },
@@ -82,7 +82,7 @@ export default {
   },
   methods: {
     getData() {
-      this.$store.dispatch("loadGroupedStudents");
+      this.$store.dispatch('loadGroupedStudents');
     },
     getFullName(arr) {
       return `${arr.lastname} ${arr.firstname} ${arr.patronymic}`;

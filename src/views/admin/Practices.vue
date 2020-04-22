@@ -42,23 +42,23 @@
 </template>
 
 <script>
-import NavAside from "../../components/NavAside";
+import NavAside from '../../components/NavAside';
 
-const { shell } = require("electron");
-const path = require("path");
-const fs = require("fs");
-const { dialog } = require("electron").remote;
-const { ncp } = require("ncp");
+const { shell } = require('electron');
+const path = require('path');
+const fs = require('fs');
+const { dialog } = require('electron').remote;
+const { ncp } = require('ncp');
 
 export default {
-  name: "Practices",
+  name: 'Practices',
   components: {
     NavAside,
   },
   data() {
     return {
       files: [],
-      fileDir: "",
+      fileDir: '',
     };
   },
   mounted() {
@@ -72,7 +72,7 @@ export default {
     });
   },
   created() {
-    this.fileDir = path.join(this.$path, "/word");
+    this.fileDir = path.join(this.$path, '/word');
     if (!fs.existsSync(this.fileDir)) {
       fs.mkdirSync(this.fileDir);
     }
@@ -96,23 +96,23 @@ export default {
     loadFile() {
       dialog.showOpenDialog(
         {
-          title: "Выбрать файлы",
-          filters: [{ name: "Word", extensions: ["docx", "doc"] }],
-          properties: ["multiSelections"],
+          title: 'Выбрать файлы',
+          filters: [{ name: 'Word', extensions: ['docx', 'doc'] }],
+          properties: ['multiSelections'],
         },
         folderPaths => {
           if (folderPaths === undefined) {
             return false;
           }
           folderPaths.forEach((value, i) => {
-            const dirArr = value.split("\\");
+            const dirArr = value.split('\\');
             const fileName = dirArr[dirArr.length - 1];
             ncp(value.toString(), this.fileDir + fileName, err => {
               if (i === folderPaths.length - 1) {
                 dialog.showMessageBox({
-                  type: "info",
-                  title: "Успех",
-                  message: "Файл успешно перемещён!",
+                  type: 'info',
+                  title: 'Успех',
+                  message: 'Файл успешно перемещён!',
                 });
               }
             });
@@ -121,7 +121,7 @@ export default {
               dir: this.fileDir + fileName,
             });
           });
-        },
+        }
       );
     },
   },

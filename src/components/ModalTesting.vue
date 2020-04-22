@@ -105,46 +105,46 @@
 
 <script>
 export default {
-  name: "ModalTesting",
-  props: ["anim", "test"],
+  name: 'ModalTesting',
+  props: ['anim', 'test'],
   data() {
     return {
       modal: null,
-      scoreStudent: "",
+      scoreStudent: '',
       score: 0,
       totalTrueAnswers: 0,
       totalPercent: 0,
-      timer: "00:00",
+      timer: '00:00',
       activeBtn: false,
       interval: null,
-      student: "",
-      group: "",
+      student: '',
+      group: '',
     };
   },
   mounted() {
-    this.modal = document.querySelector(".modal");
-    this.modal.classList.remove("out");
+    this.modal = document.querySelector('.modal');
+    this.modal.classList.remove('out');
     this.modal.classList.add(`${this.anim}`);
-    this.student = localStorage.getItem("name");
-    this.group = localStorage.getItem("group");
+    this.student = localStorage.getItem('name');
+    this.group = localStorage.getItem('group');
     this.countDown(15);
   },
   methods: {
     closeModal() {
-      this.modal.classList.add("out");
+      this.modal.classList.add('out');
       this.modal.addEventListener(
-        "animationend",
+        'animationend',
         () => {
-          this.$emit("close");
+          this.$emit('close');
         },
-        false,
+        false
       );
       Object.assign(this.$data, {
-        scoreStudent: "",
+        scoreStudent: '',
         score: 0,
         totalTrueAnswers: 0,
         totalPercent: 0,
-        timer: "00:00",
+        timer: '00:00',
         activeBtn: false,
       });
     },
@@ -170,7 +170,7 @@ export default {
       const questionCount = this.test.questions.length;
       for (let i = 0; i < questionCount; i += 1) {
         const totalCheckedInBox = document.querySelectorAll(
-          `.card[data-id="${i}"] .checkbox-custom:checked`,
+          `.card[data-id="${i}"] .checkbox-custom:checked`
         );
         let scoreIncrement = 0;
         totalCheckedInBox.forEach(item => {
@@ -197,16 +197,16 @@ export default {
       this.totalPercent = (this.score * 100) / this.totalTrueAnswers;
       switch (true) {
         case this.totalPercent >= 85:
-          this.scoreStudent = "5";
+          this.scoreStudent = '5';
           break;
         case this.totalPercent >= 75 && this.totalPercent < 85:
-          this.scoreStudent = "4";
+          this.scoreStudent = '4';
           break;
         case this.totalPercent >= 60 && this.totalPercent < 75:
-          this.scoreStudent = "3";
+          this.scoreStudent = '3';
           break;
         default:
-          this.scoreStudent = "2";
+          this.scoreStudent = '2';
           break;
       }
     },
@@ -218,12 +218,12 @@ export default {
         time: this.timer,
         date: new Date()
           .toString()
-          .split(" ")
+          .split(' ')
           .splice(1, 4)
-          .join(" "),
+          .join(' '),
         test: this.test.title,
       };
-      this.$store.dispatch("createResult", data);
+      this.$store.dispatch('createResult', data);
       this.activeBtn = true;
     },
   },
