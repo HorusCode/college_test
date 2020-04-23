@@ -21,23 +21,24 @@ module.exports = {
     "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off",
     "vue/html-closing-bracket-newline": ["error", {
       "singleline": "never",
-      "multiline": "never"
     }],
     "prettier/prettier": [
       "error",
       {
         printWidth: 100,
-        trailingComma: "es5",
+        trailingComma: "all",
         singleQuote: true,
-        proseWrap: "never",
+        proseWrap: "always",
         htmlWhitespaceSensitivity: "ignore",
         jsxBracketSameLine: true,
-        endOfLine: "crlf",
-        disableLanguages: ["html"],
       },
     ],
   },
-
+  globals: {
+    "axios": true,
+    "_": true,
+    "anime": true
+  },
   parserOptions: {
     parser: "babel-eslint",
   },

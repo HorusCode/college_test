@@ -28,8 +28,9 @@
       </ul>
     </div>
     <footer class="sidebar__footer d-flex justify-content-center align-items-center">
-      <button class="btn btn-primary" @click="exit">
-        Выход
+      <button id="logout" class="btn btn-primary is-extended" @click="exit">
+        <i class="mdi mdi-logout" />
+        <span>Выход</span>
       </button>
     </footer>
   </aside>

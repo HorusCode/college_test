@@ -8,10 +8,10 @@
 
 .grid-main {
   display: grid;
-  grid-template-areas: ". c c c "
-                       ". c c c"
-                       ". c c c";
-  grid-template-columns: 300px repeat(3, 1fr);
+  grid-template-areas: "s c c c "
+                       "s c c c"
+                       "s c c c";
+  grid-template-columns: auto repeat(3, 1fr);
   height: inherit;
   width: inherit;
 }

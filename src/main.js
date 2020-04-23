@@ -2,6 +2,7 @@ import Vue from 'vue';
 import App from './App';
 import router from './router';
 import store from './store';
+import '@/helpers/ui';
 
 // Import styles
 import './assets/scss/global.scss';

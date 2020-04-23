@@ -109,7 +109,11 @@
     @include button-text($danger);
   }
 
-
+  &.btn-icon {
+    .mdi + span {
+      display: none;
+    }
+  }
   &:disabled {
     background-color: $muted;
     opacity: .3;
@@ -146,5 +150,7 @@
   &.width-1 {
     width: 9rem;
   }
+
+
 }
 
