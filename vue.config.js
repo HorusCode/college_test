@@ -1,14 +1,14 @@
 module.exports = {
-  /* css: {
+  css: {
     loaderOptions: {
       sass: {
-        prependData: `@import "@/assets/scss/global.scss";`
-      }
-    }
-  } */
+        prependData: `@import "@/assets/scss/global.scss";`,
+      },
+    },
+  },
   configureWebpack: {
     resolve: {
-      mainFields: ["main", "module"],
+      mainFields: ['main', 'module'],
     },
   },
   devServer: {
@@ -17,5 +17,5 @@ module.exports = {
       errors: false,
     },
   },
-  lintOnSave: process.env.NODE_ENV !== "production",
+  lintOnSave: process.env.NODE_ENV !== 'production',
 };

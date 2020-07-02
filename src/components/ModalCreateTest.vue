@@ -29,23 +29,27 @@
         <div
           v-for="(question, index) in test.questions"
           :key="`question-${index}`"
-          class="card vertical mb-1">
+          class="card vertical mb-1"
+        >
           <header class="card-header">
             <h3 class="text-title">Вопрос №{{ index + 1 }}</h3>
             <i
               class="mdi mdi-plus pos-right mdi-rotate-45 mdi-36px"
-              @click="deleteQuestion(index)"/>
+              @click="deleteQuestion(index)"
+            />
           </header>
           <div class="card-content">
             <editor
               v-model="question.name"
               api-key="mohavi6jwno1pmy1mk56zqri2l8vqihfl82mt4u4v1yhytee"
-              :init="editorConfig"/>
+              :init="editorConfig"
+            />
             <div class="answers">
               <div
                 v-for="(answer, i) in question.answers"
                 :key="`answer-${i}`"
-                class="d-flex align-items-center">
+                class="d-flex align-items-center"
+              >
                 <input
                   v-if="typeClass(question.type) === 'radio'"
                   :id="`radio-${index}-${i}`"
@@ -66,7 +70,8 @@
                 />
                 <label
                   :for="`${typeClass(question.type)}-${index}-${i}`"
-                  :class="typeClass(question.type) + '-custom-label'">
+                  :class="typeClass(question.type) + '-custom-label'"
+                >
                   верный
                 </label>
                 <div class="input-line">
@@ -75,10 +80,12 @@
                       v-model="answer.text"
                       class="input default transparent square"
                       type="text"
-                      required/>
+                      required
+                    />
                     <i
                       class="mdi pos-right mdi-plus mdi-rotate-45 c-pointer"
-                      @click="deleteAnswer(index, i)"/>
+                      @click="deleteAnswer(index, i)"
+                    />
                   </div>
                 </div>
               </div>
@@ -223,7 +230,7 @@ export default {
         () => {
           this.$emit('close');
         },
-        false
+        false,
       );
     },
     changeRadioButton(q) {

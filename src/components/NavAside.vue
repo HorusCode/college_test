@@ -13,14 +13,8 @@
         <li class="vertical-list__heading">
           Меню
         </li>
-        <li class="vertical-list__item --active">
-          <router-link
-            v-for="(link, index) in activeLinks"
-            :key="index"
-            class="link"
-            :to="link.path"
-            aria-expanded="true"
-          >
+        <li v-for="(link, index) in activeLinks" :key="index" class="vertical-list__item">
+          <router-link class="link" :to="link.path" aria-expanded="true">
             <span class="mdi pos-left-null" :class="link.class" />
             {{ link.title }}
           </router-link>
@@ -139,4 +133,9 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+.link.router-link-exact-active {
+  color: $primary;
+  text-decoration: underline;
+}
+</style>

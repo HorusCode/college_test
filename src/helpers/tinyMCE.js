@@ -1,34 +1,20 @@
 import Api from '@/helpers/api';
+import { writeword } from '@/plugins/writeword.tinymce';
 
 let editorConfig = {
   height: 500,
   language: 'ru',
-  plugins: 'codesample image link lists media print table code',
+  plugins: 'codesample image link lists media print table code writeword importcss',
   menubar: false,
   body_class: 'mb-1',
+  content_css: '/app.css',
   toolbar:
     'undo redo | bold italic underline strikethrough | ' +
     'fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | ' +
-    'outdent indent | numlist bullist | forecolor backcolor removeformat | codesample image link media print code table selectiveDateButton',
+    'outdent indent | numlist bullist | forecolor backcolor removeformat | codesample image link media print code table inputButton',
   toolbar_mode: 'sliding',
-  setup: editor => {
-    editor.ui.registry.addButton('selectiveDateButton', {
-      icon: 'insert-time',
-      tooltip: 'Insert Current Date',
-      disabled: true,
-      onAction: function(_) {
-        editor.insertContent("<input type='text' />");
-      },
-      onSetup: function(buttonApi) {
-        const editorEventCallback = function(eventApi) {
-          buttonApi.setDisabled(eventApi.element.nodeName.toLowerCase() === 'input');
-        };
-        editor.on('NodeChange', editorEventCallback);
-        return function(buttonApi) {
-          editor.off('NodeChange', editorEventCallback);
-        };
-      },
-    });
+  setup: function() {
+    window.tinymce.PluginManager.add('writeword', writeword);
   },
   images_upload_handler: function(blobInfo, success, failure) {
     const formData = new FormData();

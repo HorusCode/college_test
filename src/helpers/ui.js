@@ -1,10 +1,9 @@
 // Collapsible lists
 import anime from 'animejs';
+import $ from '@/helpers/dom';
 
 window.onload = () => {
-  let $grid = document.querySelector('.grid-main');
-
-  document.querySelectorAll('.vertical-list__trigger').forEach(item => {
+  $('.vertical-list__trigger').each(item => {
     item.addEventListener('click', function() {
       let subMenu = this.nextElementSibling;
       this.querySelector('.mdi-chevron-up').classList.toggle('mdi-rotate-180');
@@ -21,9 +20,9 @@ window.onload = () => {
     });
   });
 
-  document.querySelector('.burger').addEventListener('click', function() {
-
-    let $sidebar = $grid.querySelector('.sidebar');
+  $('#app').on('click', '.burger, .burger > span', function() {
+    $('.burger').toggleClass('active');
+    let $sidebar = $('.sidebar')[0];
     $sidebar.classList.toggle('close');
 
     let logout = document.getElementById('logout');
